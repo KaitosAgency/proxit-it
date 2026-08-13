@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Proxi IT — site web (preview refonte)
 
-## Getting Started
+Preview Next.js de la refonte proxi-it.fr, basée sur l'audit Kaitos Book.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router)
+- React 19 + TypeScript
+- Tailwind CSS v4
+- **shadcn/ui** (style base-nova) : Button, Card, Badge, Accordion, Sheet, Input, Select…
+- Lucide React
+
+## Design
+
+Inspiré de [Faillefox](https://faillefox.com/) :
+- **Hero sombre** : cadrillage + colonnes de code en fond + console + CTA
+- **Menu desktop (accueil)** : pill flottante transparente, solidifiée au scroll (comme Kaitos)
+- **Reste du site en light** : fond `#f4f7fb`, cartes blanches, ombres douces
+- **Section Fonctionnalités** : grille 3×2 dans une carte blanche avec séparateurs
+- Labels uppercase teal, titres navy, corps gris
+
+## Homepage
+
+Ordre des sections : Hero → Services → Odoo (secondaire) → Trust → FAQ → CTA final.
+
+## Démarrage
 
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrir [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Pages preview
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Route | Description |
+|---|---|
+| `/` | Home — positionnement IT clair, Odoo secondaire |
+| `/infogerance-informatique-bourges` | Page service pilier |
+| `/services-manages-bourges` | Supervision 24/7 |
+| `/cybersecurite-pme-bourges` | Cybersécurité PME |
+| `/sauvegarde-entreprise-bourges` | Sauvegardes |
+| `/integrateur-odoo-bourges` | Silo Odoo |
+| `/contact` | Formulaire + carte + coordonnées |
+| `/mentions-legales` | Mentions légales |
+| `/politique-de-confidentialite` | RGPD |
 
-## Learn More
+## Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/                 Routes Next.js
+components/          UI, sections, layout, SEO
+lib/site.ts          Constantes marque (NAP, nav, FAQ, stats, etc.)
+public/              Logo clean (long light/dark, mid), llms.txt, og.png
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Variables d'environnement
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Variable | Rôle |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | URL canonique (défaut : `https://www.proxi-it.fr`) |
+| `RESEND_API_KEY` | Envoi email formulaire (production) |
+| `CONTACT_TO` | Destinataire des demandes |
+| `ODOO_WEBHOOK_URL` | Alternative webhook CRM |
 
-## Deploy on Vercel
+En développement, le formulaire accepte les soumissions et logue la payload. En production sans clé configurée, une erreur explicite est renvoyée.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## SEO
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- JSON-LD `LocalBusiness` global (layout)
+- `FAQPage` sur la home et pages service avec FAQ
+- `Service` sur chaque page service
+- Open Graph image : `/og.png`
+- Fichier `public/llms.txt` pour les moteurs IA
+
+## Prochaines étapes
+
+1. Brancher Resend ou webhook Odoo CRM
+2. Ajouter pages pSEO (`/infogerance/[ville]`)
+3. Déployer preview Vercel (`preview.proxi-it.fr`)
+
+## Référence
+
+Audit stratégique : `kaitos-book` → espace Proxi IT → `audit-proxi-it`

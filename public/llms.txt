@@ -1,0 +1,14 @@
+# Proxi IT
+> Infogérance et intégration Odoo à Bourges (Cher)
+
+## Services
+- [Infogérance](https://www.proxi-it.fr/infogerance-informatique-bourges)
+- [Services managés](https://www.proxi-it.fr/services-manages-bourges)
+- [Cybersécurité PME](https://www.proxi-it.fr/cybersecurite-pme-bourges)
+- [Sauvegardes entreprise](https://www.proxi-it.fr/sauvegarde-entreprise-bourges)
+- [Intégrateur Odoo](https://www.proxi-it.fr/integrateur-odoo-bourges)
+
+## Entreprise
+- [Contact](https://www.proxi-it.fr/contact)
+- Adresse : 8 rue Jules Ferry, 18000 Bourges
+- Téléphone : +33 2 18 15 05 30
