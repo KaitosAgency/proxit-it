@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { LinkedinIcon } from "@/components/icons/linkedin-icon";
 import { legalLinks, logos, nav, site } from "@/lib/site";
 import { Separator } from "@/components/ui/separator";
 
@@ -21,6 +22,19 @@ export function SiteFooter() {
             Infogérance et services managés à Bourges depuis {site.experienceYears} ans.
             Supervision 24/7, maintenance proactive, intégrateur Odoo certifié.
           </p>
+          <Link
+            href="/integrateur-odoo-bourges"
+            className="mt-6 inline-block transition-opacity hover:opacity-90"
+            aria-label="Proxi IT, partenaire Odoo Learning Partner à Bourges"
+          >
+            <Image
+              src={logos.odooLearningPartner}
+              alt="Odoo Learning Partner"
+              width={200}
+              height={72}
+              className="h-11 w-auto"
+            />
+          </Link>
         </div>
 
         <div>
@@ -52,6 +66,17 @@ export function SiteFooter() {
             <li>
               <a href={`mailto:${site.email}`} className="transition-colors hover:text-white">
                 {site.email}
+              </a>
+            </li>
+            <li>
+              <a
+                href={site.social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 transition-colors hover:text-white"
+              >
+                <LinkedinIcon />
+                LinkedIn
               </a>
             </li>
           </ul>

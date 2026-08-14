@@ -25,7 +25,11 @@ Ordre des sections : Hero → Services → Odoo (secondaire) → Trust → FAQ �
 
 ## Démarrage
 
+**Repo :** [github.com/KaitosAgency/proxit-it](https://github.com/KaitosAgency/proxit-it)
+
 ```bash
+git clone https://github.com/KaitosAgency/proxit-it.git
+cd proxit-it
 npm install
 cp .env.example .env.local
 npm run dev
@@ -53,7 +57,7 @@ Ouvrir [http://localhost:3000](http://localhost:3000).
 app/                 Routes Next.js
 components/          UI, sections, layout, SEO
 lib/site.ts          Constantes marque (NAP, nav, FAQ, stats, etc.)
-public/              Logo clean (long light/dark, mid), llms.txt, og.png
+public/              Logo clean (long light/dark, mid), llms.txt
 ```
 
 ## Variables d'environnement
@@ -97,11 +101,11 @@ En développement, le formulaire logue la payload si Odoo n'est pas configuré. 
 - JSON-LD `LocalBusiness` global (layout)
 - `FAQPage` sur la home et pages service avec FAQ
 - `Service` sur chaque page service
-- Open Graph image : `/og.png`
+- Open Graph : image générée automatiquement (`/opengraph-image`, 1200×630)
 - Fichier `public/llms.txt` pour les moteurs IA
 - **Sitemap** : `/sitemap.xml` (auto-généré)
 - **Robots** : `/robots.txt` (auto-généré)
-- **Google Analytics 4** : si `NEXT_PUBLIC_GA_MEASUREMENT_ID` est défini
+- **Google Analytics 4** : si `NEXT_PUBLIC_GA_MEASUREMENT_ID` est défini (chargé **après consentement** via bandeau cookies)
 - **Google Search Console** : vérification via `GOOGLE_SITE_VERIFICATION`
 - **Conversion GA4** : événement `generate_lead` à chaque formulaire contact envoyé
 
@@ -144,7 +148,11 @@ Résumé : rapidité de création agentique (15 pages en 2h), fluidité UX, desi
 1. Configurer Odoo CRM (suivre le guide ci-dessus)
 2. Configurer GA4 + GSC (suivre le guide ci-dessus)
 3. Ajouter pages pSEO (`/infogerance/[ville]`)
-4. Déployer preview Vercel (`preview.proxi-it.fr`)
+4. Déployer sur Vercel et basculer les DNS OVH
+
+📖 **[Déploiement Vercel & DNS OVH](../../../Repos/kaitos-book/spaces/proxi-it/documents/audit-proxi-it/pages/deploiement-vercel-ovh.md)** — guide pas à pas pour mettre le site en ligne.
+
+📖 **[Modifier le site](../../../Repos/kaitos-book/spaces/proxi-it/documents/audit-proxi-it/pages/modifications-site.md)** — repo GitHub, édition agentique (Cursor, Claude, Antigravity), push ou fork.
 
 ## Référence
 

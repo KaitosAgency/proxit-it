@@ -143,33 +143,6 @@ export function ContactForm() {
             </Select>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="workstations">Nombre de postes</Label>
-              <Input
-                id="workstations"
-                name="workstations"
-                type="number"
-                min={1}
-                inputMode="numeric"
-                placeholder="Ex. 12"
-                className="bg-white"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="servers">Nombre de serveurs</Label>
-              <Input
-                id="servers"
-                name="servers"
-                type="number"
-                min={0}
-                inputMode="numeric"
-                placeholder="Ex. 1"
-                className="bg-white"
-              />
-            </div>
-          </div>
-
           <div className="space-y-2">
             <Label htmlFor="message">Votre message *</Label>
             <Textarea id="message" name="message" rows={5} required className="bg-white" />

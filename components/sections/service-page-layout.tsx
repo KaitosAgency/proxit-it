@@ -1,11 +1,6 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { FaqWithStructuredData } from "@/components/sections/faq-with-structured-data";
 import { LinkButton } from "@/components/ui/link-button";
-import { JsonLd, faqJsonLd, serviceJsonLd } from "@/components/seo/json-ld";
+import { JsonLd, serviceJsonLd } from "@/components/seo/json-ld";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CtaBand } from "@/components/sections/cta-band";
 import type { FaqItem } from "@/lib/site";
@@ -22,7 +17,6 @@ export function ServicePageLayout({ title, intro, path, bullets, faq = [] }: Ser
   return (
     <>
       <JsonLd data={serviceJsonLd(title, intro, path)} />
-      {faq.length > 0 ? <JsonLd data={faqJsonLd(faq)} /> : null}
 
       <section className="section-glow border-b border-slate-200/80 section-padding">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
@@ -81,18 +75,7 @@ export function ServicePageLayout({ title, intro, path, bullets, faq = [] }: Ser
         <section className="section-glow border-t border-slate-200/80 section-padding-sm">
           <div className="mx-auto max-w-3xl px-4 md:px-6">
             <h2 className="text-2xl font-bold text-brand-navy">Questions fréquentes</h2>
-            <Accordion className="mt-6">
-              {faq.map((item, index) => (
-                <AccordionItem key={item.question} value={`faq-${index}`} className="border-slate-200">
-                  <AccordionTrigger className="text-brand-navy hover:text-brand-teal">
-                    {item.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
-                    {item.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+            <FaqWithStructuredData items={faq} className="mt-6" />
           </div>
         </section>
       ) : null}

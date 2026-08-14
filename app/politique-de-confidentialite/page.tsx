@@ -32,21 +32,33 @@ export default function PolitiqueConfidentialitePage() {
               Via le formulaire de contact : nom, e-mail, société, téléphone (optionnel), sujet de
               la demande, message et source de découverte (optionnel).
             </p>
+            <p className="mt-2">
+              Lors de votre navigation sur le site, des données de mesure d&apos;audience peuvent
+              être collectées via Google Analytics 4 (pages consultées, durée de visite, type
+              d&apos;appareil, source de trafic). Ces données ne permettent pas de vous identifier
+              directement.
+            </p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-brand-navy">Finalités</h2>
             <p className="mt-2">
               Répondre à vos demandes de devis ou de démonstration, assurer le suivi commercial et
-              améliorer nos services.
+              améliorer nos services. Les données de navigation servent à mesurer l&apos;audience du
+              site, comprendre l&apos;usage des pages et améliorer l&apos;expérience proposée.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-brand-navy">Durée de conservation</h2>
             <p className="mt-2">
-              Les données sont conservées pendant la durée nécessaire au traitement de votre
-              demande, puis archivées conformément aux obligations légales applicables.
+              Les données du formulaire de contact sont conservées pendant la durée nécessaire au
+              traitement de votre demande, puis archivées conformément aux obligations légales
+              applicables.
+            </p>
+            <p className="mt-2">
+              Les données de mesure d&apos;audience Google Analytics sont conservées selon la
+              durée configurée dans notre compte GA4 (14 mois maximum recommandé).
             </p>
           </section>
 
@@ -60,10 +72,50 @@ export default function PolitiqueConfidentialitePage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-brand-navy">Cookies</h2>
+            <h2 className="text-lg font-semibold text-brand-navy">Cookies et mesure d&apos;audience</h2>
             <p className="mt-2">
-              Ce site preview n&apos;utilise pas de cookies de tracking. Des cookies techniques
-              peuvent être utilisés par l&apos;hébergeur pour le bon fonctionnement du service.
+              Ce site utilise Google Analytics 4, un service de mesure d&apos;audience fourni par
+              Google Ireland Limited. Google Analytics dépose des cookies ou technologies similaires
+              pour analyser la fréquentation du site et produire des statistiques anonymisées.
+            </p>
+            <p className="mt-2">
+              Les données collectées sont transmises à Google et peuvent être hébergées en dehors
+              de l&apos;Union européenne. Google peut les utiliser conformément à sa{" "}
+              <a
+                href="https://policies.google.com/privacy"
+                className="text-brand-navy hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                politique de confidentialité
+              </a>
+              . Pour en savoir plus sur le fonctionnement de Google Analytics :{" "}
+              <a
+                href="https://support.google.com/analytics/answer/6004245"
+                className="text-brand-navy hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                documentation Google
+              </a>
+              .
+            </p>
+            <p className="mt-2">
+              Vous pouvez refuser le dépôt de cookies analytics en configurant votre navigateur,
+              en installant un module de désactivation (
+              <a
+                href="https://tools.google.com/dlpage/gaoptout"
+                className="text-brand-navy hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                complément Google Analytics Opt-out
+              </a>
+              ) ou en activant le signal « Do Not Track » de votre navigateur.
+            </p>
+            <p className="mt-2">
+              Des cookies strictement techniques peuvent également être utilisés par
+              l&apos;hébergeur pour assurer le bon fonctionnement et la sécurité du site.
             </p>
           </section>
 

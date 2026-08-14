@@ -4,7 +4,6 @@ export const site = {
   tagline: "Votre informatique, on s'en occupe.",
   description:
     "Infogérance et services managés pour les entreprises à Bourges et dans le Cher. Supervision 24/7, maintenance proactive, support humain. Intégrateur Odoo certifié.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.proxi-it.fr",
   phone: "+33 2 18 15 05 30",
   phoneHref: "tel:+33218150530",
   email: "contact@proxi-it.fr",
@@ -30,7 +29,22 @@ export const site = {
   },
   contactMapHref: "/contact#carte",
   experienceYears: 15,
+  social: {
+    linkedin: "https://www.linkedin.com/company/proxiit/",
+  },
 } as const;
+
+export function getSiteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+  }
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  return "https://www.proxi-it.fr";
+}
 
 export const interventionZones = {
   titlePrefix: "Intervention sur site dans ",
@@ -124,6 +138,7 @@ export const logos = {
   default: "/logo.svg",
   only: "/logo-only.svg",
   odoo: "/odoo-logo.svg",
+  odooLearningPartner: "/odoo-learning-partner.png",
 } as const;
 
 export const nav = {
@@ -143,6 +158,8 @@ export const nav = {
 export const legalLinks = [
   { label: "Mentions légales", href: "/mentions-legales" },
   { label: "Politique de confidentialité", href: "/politique-de-confidentialite" },
+  { label: "Plan du site", href: "/sitemap.xml" },
+  { label: "llms.txt", href: "/llms.txt" },
 ] as const;
 
 export const proofStats = [

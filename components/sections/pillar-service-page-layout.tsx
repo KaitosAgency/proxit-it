@@ -13,9 +13,10 @@ import { ReviewsBand } from "@/components/sections/reviews-band";
 import { SectionHeader } from "@/components/sections/section-header";
 import { ServiceFaqSection } from "@/components/sections/service-faq-section";
 import { TrustSection } from "@/components/sections/trust-section";
-import { JsonLd, pillarPageJsonLd, type BreadcrumbItem } from "@/components/seo/json-ld";
-import { ServiceBreadcrumb } from "@/components/seo/service-breadcrumb";
+import { JsonLd, pillarPageJsonLd } from "@/components/seo/json-ld";
+import { ServiceBreadcrumbBar } from "@/components/seo/service-breadcrumb";
 import { LinkButton } from "@/components/ui/link-button";
+import { buildPillarBreadcrumbs } from "@/lib/pillar-breadcrumbs";
 import type { FaqItem } from "@/lib/site";
 export type { ContentBlock };
 
@@ -124,17 +125,7 @@ export async function PillarServicePageLayout({
       ? "/integrateur-odoo-bourges"
       : "/infogerance-informatique-bourges";
 
-  const breadcrumbs: BreadcrumbItem[] =
-    path === hubPath
-      ? [
-          { name: "Accueil", path: "/" },
-          { name: title, path },
-        ]
-      : [
-          { name: "Accueil", path: "/" },
-          { name: hubLabel, path: hubPath },
-          { name: title, path },
-        ];
+  const breadcrumbs = buildPillarBreadcrumbs({ path, title, hubPath, hubLabel });
 
   return (
     <>
@@ -143,19 +134,19 @@ export async function PillarServicePageLayout({
           title,
           intro,
           path,
-          faq,
           breadcrumbs,
           updatedAt,
         })}
       />
 
-      <section className="section-glow border-b border-slate-200/80 section-padding">
+      <ServiceBreadcrumbBar items={breadcrumbs} />
+
+      <section className="section-glow border-b border-slate-200/80 pb-16 pt-8 md:pb-20 md:pt-10">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
-          <ServiceBreadcrumb items={breadcrumbs} className="mb-4" />
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-brand-teal">
             {serviceLabel}
           </p>
-          <h1 className="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-brand-navy md:text-5xl">
+          <h1 className="mt-3 max-w-3xl text-4xl font-bold tracking-tight text-brand-navy md:text-5xl">
             {title}
             {titleAccent ? (
               <>
@@ -188,9 +179,9 @@ export async function PillarServicePageLayout({
         methodSteps={methodSteps}
       />
 
-      <section className="section-glow section-divider-top section-padding">
+      <section className="section-glow section-divider-top pb-16 pt-8 md:pb-20 md:pt-10">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
-          <TrustSection />
+          <TrustSection className="mt-0" />
 
           <div className="card-surface mt-16 overflow-hidden rounded-2xl p-8 md:p-10">
             <h2 className="text-2xl font-bold tracking-tight text-brand-navy md:text-3xl">

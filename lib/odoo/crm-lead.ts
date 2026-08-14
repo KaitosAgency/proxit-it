@@ -17,8 +17,6 @@ export type ContactLeadPayload = {
   phone?: string;
   topic: string;
   attribution?: string;
-  workstations?: string;
-  servers?: string;
   message: string;
 };
 
@@ -44,15 +42,9 @@ async function getCrmRouting(): Promise<CrmRouting> {
 }
 
 function buildLeadDescription(payload: ContactLeadPayload): string {
-  const parcDetails = [
-    payload.workstations?.trim() ? `Nombre de postes : ${payload.workstations.trim()}` : null,
-    payload.servers?.trim() ? `Nombre de serveurs : ${payload.servers.trim()}` : null,
-  ].filter(Boolean);
-
   const lines = [
     `Votre demande concerne : ${payload.topic}`,
     payload.attribution ? `Comment nous avez-vous connu : ${payload.attribution}` : null,
-    parcDetails.length > 0 ? parcDetails.join("\n") : null,
     "",
     payload.message,
   ];

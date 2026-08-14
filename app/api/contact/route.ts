@@ -14,8 +14,6 @@ function normalizePayload(body: ContactLeadPayload): ContactLeadPayload {
     phone: body.phone?.trim() || undefined,
     topic: body.topic.trim(),
     attribution: body.attribution?.trim() || undefined,
-    workstations: body.workstations?.trim() || undefined,
-    servers: body.servers?.trim() || undefined,
     message: body.message.trim(),
   };
 }

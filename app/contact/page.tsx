@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/forms/contact-form";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GoogleRatingBadge } from "@/components/ui/google-rating-badge";
 import { site } from "@/lib/site";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, MapPin, Phone, Star } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -35,6 +36,9 @@ export default function ContactPage() {
             <Card variant="outline" className="rounded-2xl">
               <CardHeader variant="section">
                 <CardTitle variant="section">{site.legalName}</CardTitle>
+                <CardAction>
+                  <GoogleRatingBadge />
+                </CardAction>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-4 text-sm text-muted-foreground">
@@ -53,10 +57,6 @@ export default function ContactPage() {
                     <a href={`mailto:${site.email}`} className="hover:text-brand-navy">
                       {site.email}
                     </a>
-                  </li>
-                  <li className="flex gap-3">
-                    <Star className="mt-0.5 h-4 w-4 shrink-0 text-brand-teal" aria-hidden />
-                    {site.googleRating.contactDisplay}
                   </li>
                 </ul>
               </CardContent>

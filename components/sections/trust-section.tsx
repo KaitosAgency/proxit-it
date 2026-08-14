@@ -15,9 +15,13 @@ function TrustCardIcon({ icon: Icon }: { icon: LucideIcon }) {
   );
 }
 
-export function TrustSection() {
+type TrustSectionProps = {
+  className?: string;
+};
+
+export function TrustSection({ className }: TrustSectionProps) {
   return (
-    <div className="mt-16 md:mt-20">
+    <div className={cn("mt-16 md:mt-20", className)}>
       <SectionHeader
         label="Pourquoi Proxi IT"
         title="Un partenaire IT local, pas un prestataire anonyme."

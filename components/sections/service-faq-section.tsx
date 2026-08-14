@@ -1,4 +1,4 @@
-import { FaqAccordion } from "@/components/sections/faq-accordion";
+import { FaqWithStructuredData } from "@/components/sections/faq-with-structured-data";
 import { SectionHeader } from "@/components/sections/section-header";
 import type { FaqItem } from "@/lib/site";
 
@@ -13,8 +13,9 @@ export function ServiceFaqSection({
 }: ServiceFaqSectionProps) {
   return (
     <div className="mx-auto max-w-3xl">
-      <SectionHeader label="Questions fréquentes" title={title} align="center" />
-      <FaqAccordion items={items} className="mt-10" />
+      <FaqWithStructuredData items={items} className="mt-10">
+        <SectionHeader label="Questions fréquentes" title={title} align="center" />
+      </FaqWithStructuredData>
     </div>
   );
 }

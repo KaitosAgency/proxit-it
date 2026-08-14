@@ -1,4 +1,4 @@
-import { site, type FaqItem } from "@/lib/site";
+import { site, getSiteUrl, type FaqItem } from "@/lib/site";
 
 type JsonLdProps = {
   data: Record<string, unknown> | Record<string, unknown>[];
@@ -46,22 +46,25 @@ export function parseFrenchMonthYear(value: string): string | undefined {
 }
 
 export type BreadcrumbItem = {
+  /** Libellé complet pour le JSON-LD et l’accessibilité */
   name: string;
   path: string;
+  /** Libellé court affiché dans l’UI (évite la redondance avec le H1) */
+  shortName?: string;
 };
 
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "ProfessionalService"],
-    "@id": `${site.url}/#organization`,
+    "@id": `${getSiteUrl()}/#organization`,
     name: site.name,
     legalName: site.legalName,
-    url: site.url,
+    url: getSiteUrl(),
     telephone: site.phone.replace(/\s/g, ""),
     email: site.email,
     description: site.description,
-    image: `${site.url}/og.png`,
+    image: `${getSiteUrl()}/opengraph-image`,
     address: {
       "@type": "PostalAddress",
       streetAddress: site.address.street,
@@ -94,11 +97,11 @@ export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "@id": `${site.url}/#website`,
-    url: site.url,
+    "@id": `${getSiteUrl()}/#website`,
+    url: getSiteUrl(),
     name: site.name,
     publisher: {
-      "@id": `${site.url}/#organization`,
+      "@id": `${getSiteUrl()}/#organization`,
     },
     inLanguage: "fr-FR",
   };
@@ -122,12 +125,12 @@ export function faqJsonLd(faq: readonly FaqItem[]) {
 function breadcrumbEntity(path: string, breadcrumbs: readonly BreadcrumbItem[]) {
   return {
     "@type": "BreadcrumbList",
-    "@id": `${site.url}${path}#breadcrumb`,
+    "@id": `${getSiteUrl()}${path}#breadcrumb`,
     itemListElement: breadcrumbs.map((item, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: `${site.url}${item.path}`,
+      item: `${getSiteUrl()}${item.path}`,
     })),
   };
 }
@@ -140,16 +143,16 @@ function webPageEntity(
 ) {
   return {
     "@type": "WebPage",
-    "@id": `${site.url}${path}#webpage`,
-    url: `${site.url}${path}`,
+    "@id": `${getSiteUrl()}${path}#webpage`,
+    url: `${getSiteUrl()}${path}`,
     name: title,
     description,
     inLanguage: "fr-FR",
     isPartOf: {
-      "@id": `${site.url}/#website`,
+      "@id": `${getSiteUrl()}/#website`,
     },
     about: {
-      "@id": `${site.url}${path}#service`,
+      "@id": `${getSiteUrl()}${path}#service`,
     },
     ...(dateModified ? { dateModified } : {}),
   };
@@ -159,13 +162,13 @@ export function serviceJsonLd(title: string, description: string, path: string) 
   return {
     "@context": "https://schema.org",
     "@type": "Service",
-    "@id": `${site.url}${path}#service`,
+    "@id": `${getSiteUrl()}${path}#service`,
     name: title,
     description,
-    url: `${site.url}${path}`,
+    url: `${getSiteUrl()}${path}`,
     serviceType: title,
     provider: {
-      "@id": `${site.url}/#organization`,
+      "@id": `${getSiteUrl()}/#organization`,
     },
     areaServed: [
       {
@@ -184,14 +187,12 @@ export function pillarPageJsonLd({
   title,
   intro,
   path,
-  faq,
   breadcrumbs,
   updatedAt,
 }: {
   title: string;
   intro: string;
   path: string;
-  faq: readonly FaqItem[];
   breadcrumbs: readonly BreadcrumbItem[];
   updatedAt?: string;
 }) {
@@ -204,21 +205,6 @@ export function pillarPageJsonLd({
     service,
     breadcrumbEntity(path, breadcrumbs),
   ];
-
-  if (faq.length > 0) {
-    graph.push({
-      "@type": "FAQPage",
-      "@id": `${site.url}${path}#faq`,
-      mainEntity: faq.map((item) => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: item.answer,
-        },
-      })),
-    });
-  }
 
   return {
     "@context": "https://schema.org",

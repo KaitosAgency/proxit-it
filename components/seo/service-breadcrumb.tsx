@@ -1,3 +1,4 @@
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import type { BreadcrumbItem } from "@/components/seo/json-ld";
 import { cn } from "@/lib/utils";
@@ -7,30 +8,36 @@ type ServiceBreadcrumbProps = {
   className?: string;
 };
 
+function breadcrumbLabel(item: BreadcrumbItem) {
+  return item.shortName ?? item.name;
+}
+
 export function ServiceBreadcrumb({ items, className }: ServiceBreadcrumbProps) {
   return (
-    <nav aria-label="Fil d'Ariane" className={cn("text-sm text-muted-foreground", className)}>
-      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
+    <nav aria-label="Fil d'Ariane" className={cn("text-xs text-slate-500", className)}>
+      <ol className="flex flex-wrap items-center gap-1">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
 
           return (
-            <li key={item.path} className="flex items-center gap-2">
+            <li key={item.path} className="flex items-center gap-1">
               {index > 0 ? (
-                <span className="text-slate-300" aria-hidden>
-                  /
-                </span>
+                <ChevronRight
+                  className="size-3.5 shrink-0 text-slate-300"
+                  strokeWidth={2}
+                  aria-hidden
+                />
               ) : null}
               {isLast ? (
-                <span className="font-medium text-slate-600" aria-current="page">
-                  {item.name}
+                <span className="font-medium text-slate-700" aria-current="page">
+                  {breadcrumbLabel(item)}
                 </span>
               ) : (
                 <Link
                   href={item.path}
                   className="transition-colors hover:text-brand-teal"
                 >
-                  {item.name}
+                  {breadcrumbLabel(item)}
                 </Link>
               )}
             </li>
@@ -38,5 +45,15 @@ export function ServiceBreadcrumb({ items, className }: ServiceBreadcrumbProps) 
         })}
       </ol>
     </nav>
+  );
+}
+
+export function ServiceBreadcrumbBar({ items }: { items: readonly BreadcrumbItem[] }) {
+  return (
+    <div className="border-b border-slate-200/80 bg-slate-50/80">
+      <div className="mx-auto max-w-6xl px-4 py-2.5 md:px-6">
+        <ServiceBreadcrumb items={items} />
+      </div>
+    </div>
   );
 }

@@ -38,7 +38,7 @@ export function ContentBlocksSection({
   methodSteps,
 }: ContentBlocksSectionProps) {
   return (
-    <section className="section-divider-top bg-white section-padding">
+    <section className="section-divider-top bg-white pt-16 pb-8 md:pt-24 md:pb-10">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <SectionHeader label={label} title={title} description={description} />
 
