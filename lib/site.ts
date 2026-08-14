@@ -34,13 +34,27 @@ export const site = {
   },
 } as const;
 
-export function getSiteUrl(): string {
-  if (process.env.NEXT_PUBLIC_SITE_URL) {
-    return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+function normalizeSiteUrl(value: string): string {
+  const trimmed = value.trim().replace(/\/$/, "");
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    return trimmed;
   }
 
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
+  return `https://${trimmed}`;
+}
+
+export function getSiteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL?.trim()) {
+    return normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
+  }
+
+  // Évite les URLs de déploiement éphémères (projet-xxx.vercel.app) dans og:image / sitemap.
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim()) {
+    return normalizeSiteUrl(process.env.VERCEL_PROJECT_PRODUCTION_URL);
+  }
+
+  if (process.env.VERCEL_URL?.trim()) {
+    return normalizeSiteUrl(process.env.VERCEL_URL);
   }
 
   return "https://www.proxi-it.fr";

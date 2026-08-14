@@ -111,8 +111,15 @@ En développement, le formulaire logue la payload si Odoo n'est pas configuré. 
 
 | Variable | Obligatoire ? | Rôle |
 |---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Recommandé | URL canonique — sitemap, JSON-LD, **og:image** (doit = URL partagée) |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Recommandé | ID de mesure GA4 (`G-XXXXXXXXXX`) |
 | `GOOGLE_SITE_VERIFICATION` | Recommandé | Code de vérification GSC (balise HTML) |
+
+## Configuration Open Graph (aperçu de lien)
+
+📖 **[Image Open Graph sur Vercel](../../../Repos/kaitos-book/spaces/proxi-it/documents/audit-proxi-it/pages/open-graph-vercel.md)**
+
+Guide pas à pas : `NEXT_PUBLIC_SITE_URL`, vérifier `/opengraph-image`, dépannage Discord/LinkedIn, démo vs prod.
 
 ## Configuration Google Analytics & Search Console
 

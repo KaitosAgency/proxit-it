@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/seo/json-ld";
 import { googleSiteVerification, isGoogleAnalyticsEnabled } from "@/lib/analytics";
+import { createDefaultMetadata } from "@/lib/og-metadata";
 import { site, getSiteUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import "./globals.css";
@@ -20,23 +21,18 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
+const siteUrl = getSiteUrl();
+const defaultMetadata = createDefaultMetadata(siteUrl);
+
 export const metadata: Metadata = {
-  metadataBase: new URL(getSiteUrl()),
-  title: {
-    default: "Infogérance et services managés à Bourges | Proxi IT",
-    template: "%s | Proxi IT",
-  },
+  ...defaultMetadata,
   description: site.description,
   openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    siteName: site.name,
-    title: "Infogérance et services managés à Bourges | Proxi IT",
+    ...defaultMetadata.openGraph,
     description: site.description,
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Infogérance et services managés à Bourges | Proxi IT",
+    ...defaultMetadata.twitter,
     description: site.description,
   },
   ...(googleSiteVerification

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { openGraphImage, twitterImage } from "@/lib/og-metadata";
 import { getSiteUrl, site } from "@/lib/site";
 
 type ServicePageMetadataInput = {
@@ -28,11 +29,13 @@ export function createServicePageMetadata({
       title: pageTitle,
       description,
       url: pageUrl,
+      images: [openGraphImage],
     },
     twitter: {
       card: "summary_large_image",
       title: pageTitle,
       description,
+      images: [twitterImage.url],
     },
   };
 }
