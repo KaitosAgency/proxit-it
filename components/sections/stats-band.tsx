@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { BandBottomArc } from "@/components/ui/band-bottom-arc";
 import {
   statsBandBadges,
   statsBandMessages,
@@ -52,7 +53,7 @@ export function StatsBand() {
   }, []);
 
   return (
-    <section className="border-b border-brand-teal/10 bg-brand-navy">
+    <section className="relative z-10 bg-brand-navy pb-5 md:pb-6">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-7 md:flex-row md:items-center md:justify-between md:px-6">
         {/* Centré verticalement avec items-center */}
         <div className="flex items-center gap-4">
@@ -81,6 +82,8 @@ export function StatsBand() {
           ))}
         </ul>
       </div>
+
+      <BandBottomArc />
     </section>
   );
 }

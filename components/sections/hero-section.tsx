@@ -40,8 +40,8 @@ export function HeroSection() {
             </h1>
 
             <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-300 md:mx-0">
-              Supervision 24/7, maintenance proactive et support humain pour les TPE et PME
-              de Bourges. Tarif au poste, sans surprise.
+              Supervision 24/7, maintenance proactive et support humain pour les entreprises
+              de Bourges et environs. Tarif au poste, sans surprise.
             </p>
 
             <div className="mt-8 flex w-full flex-col items-center gap-3 sm:flex-row sm:items-stretch md:justify-start">

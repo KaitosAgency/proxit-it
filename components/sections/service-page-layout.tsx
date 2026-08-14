@@ -45,9 +45,9 @@ export function ServicePageLayout({ title, intro, path, bullets, faq = [] }: Ser
 
       <section className="bg-white section-padding">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-2 md:px-6">
-          <Card className="border-slate-200/80 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-brand-navy">Ce qui est inclus</CardTitle>
+          <Card variant="outline" className="rounded-2xl">
+            <CardHeader variant="section">
+              <CardTitle variant="section">Ce qui est inclus</CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
@@ -63,13 +63,13 @@ export function ServicePageLayout({ title, intro, path, bullets, faq = [] }: Ser
             </CardContent>
           </Card>
 
-          <Card className="border-slate-200/80 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-brand-navy">Pour qui ?</CardTitle>
+          <Card variant="outline" className="rounded-2xl">
+            <CardHeader variant="section">
+              <CardTitle variant="section">Pour qui ?</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                TPE et PME du Cher sans service IT interne, structures en croissance ou
+                Entreprises du Cher sans service IT interne, structures en croissance ou
                 dirigeants qui veulent un interlocuteur unique, local et réactif à Bourges.
               </p>
             </CardContent>

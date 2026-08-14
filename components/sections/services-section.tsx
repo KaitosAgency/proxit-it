@@ -8,10 +8,11 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
+import { TrustSection } from "@/components/sections/trust-section";
+import { getSurfaceGridCellClass, SurfaceGrid } from "@/components/sections/surface-grid";
 import { cn } from "@/lib/utils";
 
 type Feature = {
-  number: string;
   title: string;
   description: string;
   href: string;
@@ -20,7 +21,6 @@ type Feature = {
 
 const features: Feature[] = [
   {
-    number: "01",
     title: "Supervision 24/7",
     description:
       "Monitoring continu, alertes proactives et gestion des incidents avant qu'ils bloquent votre activité.",
@@ -28,7 +28,6 @@ const features: Feature[] = [
     icon: Clock,
   },
   {
-    number: "02",
     title: "Infogérance complète",
     description:
       "Maintenance préventive, visites sur site et gestion de votre parc informatique au quotidien.",
@@ -36,15 +35,13 @@ const features: Feature[] = [
     icon: Wrench,
   },
   {
-    number: "03",
-    title: "Cybersécurité PME",
+    title: "Cybersécurité",
     description:
       "Mises à jour, sauvegardes, gestion des accès et sensibilisation de vos équipes.",
     href: "/cybersecurite-pme-bourges",
     icon: Shield,
   },
   {
-    number: "04",
     title: "Sauvegardes fiables",
     description:
       "Backup automatisé, tests de restauration et plan de reprise d'activité pour vos données.",
@@ -52,7 +49,6 @@ const features: Feature[] = [
     icon: HardDrive,
   },
   {
-    number: "05",
     title: "Proximité locale",
     description:
       "Basés à Bourges, intervention sur site dans le Cher avec un interlocuteur unique et réactif.",
@@ -60,7 +56,6 @@ const features: Feature[] = [
     icon: MapPin,
   },
   {
-    number: "06",
     title: "Odoo certifié",
     description:
       "Partenaire Odoo Learning Partner : ERP, CRM et facturation électronique avec le même prestataire.",
@@ -90,21 +85,18 @@ export function ServicesSection() {
           Tout ce qu&apos;il faut pour une IT sereine.
         </h2>
 
-        <div className="mt-10 overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_20px_60px_-20px_rgba(0,27,54,0.12)]">
-          <div className="grid md:grid-cols-3">
-            {features.map((feature, index) => (
+        <SurfaceGrid className="mt-10">
+          {features.map((feature, index) => (
               <Link
                 key={feature.title}
                 href={feature.href}
                 className={cn(
-                  "group block p-8 transition-colors hover:bg-slate-50/80",
-                  index < 3 && "border-b border-slate-100",
-                  index % 3 !== 2 && "md:border-r md:border-slate-100",
+                  "btn-fill btn-fill-flat group relative block transition-colors hover:bg-slate-50/80",
+                  getSurfaceGridCellClass(index, features.length, 3),
                 )}
               >
                 <FeatureIcon icon={feature.icon} />
-                <p className="text-sm font-bold text-brand-teal">{feature.number}</p>
-                <h3 className="mt-1 text-lg font-bold text-brand-navy group-hover:text-brand-teal-dim">
+                <h3 className="text-lg font-bold text-brand-navy group-hover:text-brand-teal-dim">
                   {feature.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -112,8 +104,9 @@ export function ServicesSection() {
                 </p>
               </Link>
             ))}
-          </div>
-        </div>
+        </SurfaceGrid>
+
+        <TrustSection />
       </div>
     </section>
   );

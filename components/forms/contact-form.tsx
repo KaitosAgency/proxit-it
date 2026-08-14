@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { attributionOptions } from "@/lib/site";
+import { trackContactFormSubmit } from "@/lib/analytics-events";
+import { attributionOptions, contactTopicOptions, getContactTopicLabel } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,12 +17,6 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 type FormState = "idle" | "loading" | "success" | "error";
-
-const topicOptions = [
-  { value: "infogerance", label: "Infogérance / services managés" },
-  { value: "odoo", label: "Intégration Odoo" },
-  { value: "other", label: "Autre" },
-] as const;
 
 export function ContactForm() {
   const [state, setState] = useState<FormState>("idle");
@@ -42,7 +37,8 @@ export function ContactForm() {
 
     const formData = new FormData(event.currentTarget);
     const payload = Object.fromEntries(formData.entries());
-    payload.topic = topic;
+    const topicLabel = getContactTopicLabel(topic);
+    payload.topic = topicLabel;
     payload.attribution = attribution;
 
     try {
@@ -57,6 +53,7 @@ export function ContactForm() {
         throw new Error(data.error ?? "Une erreur est survenue.");
       }
 
+      trackContactFormSubmit(topicLabel);
       setState("success");
       event.currentTarget.reset();
       setTopic("");
@@ -69,9 +66,9 @@ export function ContactForm() {
 
   if (state === "success") {
     return (
-      <Card className="border-slate-200/80 bg-white shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-brand-teal">Message envoyé</CardTitle>
+      <Card variant="outline" className="rounded-2xl">
+        <CardHeader variant="section">
+          <CardTitle variant="success">Message envoyé</CardTitle>
           <CardDescription>Nous revenons vers vous sous 24h ouvrées.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -84,9 +81,9 @@ export function ContactForm() {
   }
 
   return (
-    <Card className="border-slate-200/80 bg-white shadow-sm">
-      <CardHeader>
-        <CardTitle>Écrivez-nous</CardTitle>
+    <Card variant="outline" className="rounded-2xl">
+      <CardHeader variant="section">
+        <CardTitle variant="section">Écrivez-nous</CardTitle>
         <CardDescription>Devis infogérance ou démo Odoo. Réponse sous 24h.</CardDescription>
       </CardHeader>
       <CardContent>
@@ -116,10 +113,12 @@ export function ContactForm() {
             <Label htmlFor="topic">Votre demande concerne *</Label>
             <Select value={topic} onValueChange={(value) => setTopic(value ?? "")}>
               <SelectTrigger id="topic" className="w-full bg-white">
-                <SelectValue placeholder="Choisir un sujet" />
+                <SelectValue placeholder="Choisir un sujet">
+                  {topic ? getContactTopicLabel(topic) : null}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                {topicOptions.map((option) => (
+                {contactTopicOptions.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
@@ -142,6 +141,33 @@ export function ContactForm() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="workstations">Nombre de postes</Label>
+              <Input
+                id="workstations"
+                name="workstations"
+                type="number"
+                min={1}
+                inputMode="numeric"
+                placeholder="Ex. 12"
+                className="bg-white"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="servers">Nombre de serveurs</Label>
+              <Input
+                id="servers"
+                name="servers"
+                type="number"
+                min={0}
+                inputMode="numeric"
+                placeholder="Ex. 1"
+                className="bg-white"
+              />
+            </div>
           </div>
 
           <div className="space-y-2">

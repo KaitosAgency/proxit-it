@@ -7,12 +7,14 @@
 :root {
   --brand-navy: #001b36;
   --brand-navy-deep: #000f1f;
+  --brand-navy-ink: #000810;
   --brand-teal: #5fc2ba;
   --brand-teal-dim: #3d8a84;
   --background: #f4f7fb;
   --foreground: #001b36;
-  --card: #ffffff;
+  --card: #fdfefe;
   --card-foreground: #001b36;
+  --card-surface: #fdfefe;
   --popover: #ffffff;
   --popover-foreground: #001b36;
   --primary: #001b36;
@@ -28,6 +30,10 @@
   --input: #dbe4ee;
   --ring: #5fc2ba;
   --radius: 1rem;
+  --scrollbar-track: #eef4f8;
+  --scrollbar-thumb: rgb(95 194 186 / 0.55);
+  --scrollbar-thumb-hover: #5fc2ba;
+  --scrollbar-size: 8px;
 }
 
 @theme inline {
@@ -35,6 +41,7 @@
   --color-foreground: var(--foreground);
   --color-brand-navy: var(--brand-navy);
   --color-brand-navy-deep: var(--brand-navy-deep);
+  --color-brand-navy-ink: var(--brand-navy-ink);
   --color-brand-teal: var(--brand-teal);
   --color-brand-teal-dim: var(--brand-teal-dim);
   --font-sans: var(--font-sans);
@@ -164,6 +171,79 @@ body {
   width: 100%;
 }
 
+.btn-fill-flat::after {
+  box-shadow: none;
+}
+
+.card-surface,
+.trust-card {
+  border: 2px solid #ffffff;
+  background: var(--card-surface);
+  box-shadow: 0 12px 40px -16px rgb(0 27 54 / 0.12);
+}
+
+.card-outline {
+  border: 2px solid rgb(226 232 240 / 0.9);
+  background: var(--card-surface);
+  box-shadow: 0 12px 40px -16px rgb(0 27 54 / 0.12);
+}
+
+.card-outline-teal {
+  border: 2px solid rgb(95 194 186 / 0.35);
+  background: var(--card-surface);
+  box-shadow:
+    0 12px 40px -16px rgb(0 27 54 / 0.12),
+    0 0 0 1px rgb(95 194 186 / 0.12);
+}
+
+.trust-card {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.trust-card-default {
+  box-shadow:
+    0 12px 40px -16px rgb(0 27 54 / 0.12),
+    0 0 0 2px rgb(95 194 186 / 0.35);
+}
+
+.trust-cards:has(.trust-card:hover) .trust-card-default:not(:hover) {
+  box-shadow: 0 12px 40px -16px rgb(0 27 54 / 0.12);
+}
+
+.trust-card:hover {
+  box-shadow:
+    0 12px 40px -16px rgb(0 27 54 / 0.12),
+    0 0 0 2px rgb(95 194 186 / 0.35);
+}
+
+.offer-card {
+  border-color: rgb(226 232 240 / 0.8);
+}
+
+.offer-card--highlighted {
+  border-color: rgb(95 194 186 / 0.3);
+  box-shadow:
+    0 12px 40px -16px rgb(0 27 54 / 0.12),
+    0 0 0 2px rgb(95 194 186 / 0.2);
+}
+
+@keyframes review-enter {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.review-carousel-enter {
+  animation: review-enter 0.5s ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-terminal-cursor {
     animation: none;
@@ -171,6 +251,10 @@ body {
   }
 
   .animate-blink {
+    animation: none;
+  }
+
+  .review-carousel-enter {
     animation: none;
   }
 
@@ -206,9 +290,9 @@ body {
 
 .section-glow {
   background:
-    radial-gradient(ellipse 80% 60% at 0% 20%, rgb(95 194 186 / 0.14), transparent 55%),
-    radial-gradient(ellipse 70% 55% at 100% 10%, rgb(0 27 54 / 0.05), transparent 50%),
-    var(--background);
+    radial-gradient(ellipse 80% 60% at 0% 20%, rgb(95 194 186 / 0.07), transparent 55%),
+    radial-gradient(ellipse 70% 55% at 100% 10%, rgb(0 27 54 / 0.02), transparent 50%),
+    #f8fafc;
 }
 
 .section-padding {
@@ -219,10 +303,52 @@ body {
   @apply py-14 md:py-16;
 }
 
+.section-divider-top {
+  border-top: 2px solid #ffffff;
+}
+
+/* Ne pas combiner avec une section précédente à arc (ReviewsBand, StatsBand) :
+   la courbe assure déjà la transition. */
+
+.bg-brand-navy,
+.bg-brand-navy-deep,
+.bg-brand-navy-ink {
+  --scrollbar-track: rgb(255 255 255 / 0.08);
+  --scrollbar-thumb: rgb(95 194 186 / 0.4);
+  --scrollbar-thumb-hover: #5fc2ba;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   }
+
+  *::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
+  }
+
+  *::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border: 2px solid var(--scrollbar-track);
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: var(--scrollbar-track);
+  }
+
   body {
     @apply bg-background text-foreground;
   }

@@ -1,11 +1,12 @@
 import { JsonLd, faqJsonLd } from "@/components/seo/json-ld";
+import { CoverageSection } from "@/components/sections/coverage-section";
 import { CtaBand } from "@/components/sections/cta-band";
-import { FaqSection } from "@/components/sections/faq-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { OdooBand } from "@/components/sections/odoo-band";
+import { OffersSection } from "@/components/sections/offers-section";
+import { ReviewsBand } from "@/components/sections/reviews-band";
 import { ServicesSection } from "@/components/sections/services-section";
 import { StatsBand } from "@/components/sections/stats-band";
-import { TrustSection } from "@/components/sections/trust-section";
 import { homeFaq } from "@/lib/site";
 
 export default function HomePage() {
@@ -15,9 +16,10 @@ export default function HomePage() {
       <HeroSection />
       <StatsBand />
       <ServicesSection />
+      <ReviewsBand />
+      <OffersSection />
       <OdooBand />
-      <TrustSection />
-      <FaqSection />
+      <CoverageSection />
       <CtaBand />
     </>
   );

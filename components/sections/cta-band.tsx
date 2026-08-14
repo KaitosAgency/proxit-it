@@ -3,7 +3,7 @@ import { site } from "@/lib/site";
 
 export function CtaBand() {
   return (
-    <section className="border-t border-slate-200/80 bg-white section-padding">
+    <section className="section-divider-top bg-white section-padding">
       <div className="mx-auto max-w-6xl px-4 text-center md:px-6">
         <p className="text-sm font-bold uppercase tracking-[0.2em] text-brand-teal">
           Prêt à externaliser ?

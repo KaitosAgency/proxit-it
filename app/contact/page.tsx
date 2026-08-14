@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/forms/contact-form";
-import { JsonLd, organizationJsonLd } from "@/components/seo/json-ld";
 import { site } from "@/lib/site";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, MapPin, Phone, Star } from "lucide-react";
@@ -14,8 +13,6 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <JsonLd data={organizationJsonLd()} />
-
       <section className="section-glow border-b border-slate-200/80 section-padding-sm">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-brand-teal">
@@ -35,9 +32,9 @@ export default function ContactPage() {
           <ContactForm />
 
           <div className="space-y-6">
-            <Card className="border-slate-200/80 shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-brand-navy">{site.legalName}</CardTitle>
+            <Card variant="outline" className="rounded-2xl">
+              <CardHeader variant="section">
+                <CardTitle variant="section">{site.legalName}</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-4 text-sm text-muted-foreground">
@@ -65,7 +62,7 @@ export default function ContactPage() {
               </CardContent>
             </Card>
 
-            <div className="overflow-hidden rounded-2xl border border-slate-200/80 shadow-sm scroll-mt-28" id="carte">
+            <div className="card-surface overflow-hidden rounded-2xl scroll-mt-28" id="carte">
               <iframe
                 title="Carte Proxi IT Bourges"
                 src="https://maps.google.com/maps?q=Proxi+IT+8+rue+Jules+Ferry+Bourges&output=embed"

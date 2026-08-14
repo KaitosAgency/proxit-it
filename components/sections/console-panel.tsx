@@ -101,7 +101,7 @@ export function ConsolePanel() {
   const [typingStatIndex, setTypingStatIndex] = useState<number | null>(null);
 
   return (
-    <Card className="gap-0 border-brand-teal/25 bg-brand-navy/90 py-0 text-white shadow-2xl shadow-black/30 backdrop-blur">
+    <Card variant="plain" className="gap-0 border-brand-teal/25 bg-brand-navy/90 py-0 text-white shadow-2xl shadow-black/30 backdrop-blur">
       <CardHeader className="border-b border-brand-teal/15 px-6 pb-4 pt-6">
         <div className="flex items-center justify-between">
           <StatusDots />

@@ -58,14 +58,39 @@ public/              Logo clean (long light/dark, mid), llms.txt, og.png
 
 ## Variables d'environnement
 
-| Variable | Rôle |
-|---|---|
-| `NEXT_PUBLIC_SITE_URL` | URL canonique (défaut : `https://www.proxi-it.fr`) |
-| `RESEND_API_KEY` | Envoi email formulaire (production) |
-| `CONTACT_TO` | Destinataire des demandes |
-| `ODOO_WEBHOOK_URL` | Alternative webhook CRM |
+| Variable | Obligatoire ? | Rôle |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Non | URL canonique (défaut : `https://www.proxi-it.fr`) |
+| **Odoo — connexion API** | | |
+| `ODOO_URL` | **Oui** (si Odoo) | URL instance (ex. `https://xxx.odoo.com`) |
+| `ODOO_DB` | **Oui** (si Odoo) | Nom de la base |
+| `ODOO_LOGIN` | **Oui** (si Odoo) | Login utilisateur technique |
+| `ODOO_API_KEY` | **Oui** (si Odoo) | Clé API de cet utilisateur |
+| **Odoo — contenu opportunité** | | |
+| `ODOO_LEAD_SUBJECT` | Non | Sujet CRM — défaut : `Nouveau contact site web` |
+| **Odoo — équipe / vendeur** (au moins une option) | | |
+| Param. Odoo `proxi_website.crm_team_id` | Recommandé | ID équipe « Ventes » — modifiable dans Odoo sans redéployer |
+| Param. Odoo `proxi_website.crm_user_id` | Recommandé | ID vendeur en charge — idem |
+| `ODOO_CRM_TEAM_ID` | Non | Secours env si param. Odoo absent |
+| `ODOO_CRM_USER_ID` | Non | Secours env si param. Odoo absent |
+| **Alternatives au lieu d'Odoo API** | | |
+| `ODOO_WEBHOOK_URL` | Non | Webhook n8n / controller (sans les 4 vars Odoo ci-dessus) |
+| `RESEND_API_KEY` + `CONTACT_TO` | Non | Email secours |
 
-En développement, le formulaire accepte les soumissions et logue la payload. En production sans clé configurée, une erreur explicite est renvoyée.
+**En résumé :** pour Odoo, il faut **4 variables** (`URL`, `DB`, `LOGIN`, `API_KEY`). Le reste est optionnel ou se configure dans Odoo. Sans aucune de ces configs, le formulaire ne part pas en production (sauf mode dev qui logue en console).
+
+### Routage CRM sans redéployer le site
+
+Dans Odoo : **Paramètres → Technique → Paramètres système**, créer :
+
+| Clé | Valeur |
+|-----|--------|
+| `proxi_website.crm_team_id` | ID numérique de l'équipe (ex. Ventes) |
+| `proxi_website.crm_user_id` | ID numérique du vendeur (ex. Quentin) |
+
+Proxi IT modifie équipe / vendeur ici — équivalent du sélecteur dans l'éditeur de formulaire Odoo Website.
+
+En développement, le formulaire logue la payload si Odoo n'est pas configuré. En production, Odoo API est requis (ou webhook / email de secours).
 
 ## SEO
 
@@ -74,12 +99,52 @@ En développement, le formulaire accepte les soumissions et logue la payload. En
 - `Service` sur chaque page service
 - Open Graph image : `/og.png`
 - Fichier `public/llms.txt` pour les moteurs IA
+- **Sitemap** : `/sitemap.xml` (auto-généré)
+- **Robots** : `/robots.txt` (auto-généré)
+- **Google Analytics 4** : si `NEXT_PUBLIC_GA_MEASUREMENT_ID` est défini
+- **Google Search Console** : vérification via `GOOGLE_SITE_VERIFICATION`
+- **Conversion GA4** : événement `generate_lead` à chaque formulaire contact envoyé
+
+| Variable | Obligatoire ? | Rôle |
+|---|---|---|
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Recommandé | ID de mesure GA4 (`G-XXXXXXXXXX`) |
+| `GOOGLE_SITE_VERIFICATION` | Recommandé | Code de vérification GSC (balise HTML) |
+
+## Configuration Google Analytics & Search Console
+
+📖 **[Google Analytics et Search Console](../../../Repos/kaitos-book/spaces/proxi-it/documents/audit-proxi-it/pages/google-analytics-gsc.md)**
+
+Guide pas à pas : créer GA4, vérifier GSC, configurer Vercel, soumettre le sitemap, baseline.
+
+## Configuration Odoo : guide complet
+
+Pour configurer l'intégration du formulaire de contact avec Odoo CRM, **suivez le guide détaillé** :
+
+📖 **[Intégration du formulaire de contact avec Odoo CRM](../../../Repos/kaitos-book/spaces/proxi-it/documents/audit-proxi-it/pages/odoo-form-integration.md)**
+
+Ce guide explique pas à pas :
+- Comment trouver chaque variable d'environnement dans Odoo
+- Comment créer une clé API (et ce qu'elle permet de faire)
+- Où configurer les secrets (Vercel vs GitHub)
+- Comment tester l'intégration
+- Questions fréquentes sur la sécurité et la maintenance
+
+**Prérequis :** accès admin à l'instance Odoo de Proxi IT + accès au projet Vercel.
+
+## Choix de React au lieu du Website Builder Odoo
+
+Ce projet utilise React/Next.js au lieu du Website Builder Odoo natif. **Pourquoi ce choix ?**
+
+📖 **[Vue technique : Décision React vs Odoo Builder](../../../Repos/kaitos-book/spaces/proxi-it/documents/audit-proxi-it/pages/vue-technique.md#décision--react-au-lieu-du-website-builder-odoo)**
+
+Résumé : rapidité de création agentique (15 pages en 2h), fluidité UX, design sur mesure, génération programmatique de contenu (pSEO), SEO technique sans compromis. L'intégration Odoo CRM reste native via l'API JSON-RPC.
 
 ## Prochaines étapes
 
-1. Brancher Resend ou webhook Odoo CRM
-2. Ajouter pages pSEO (`/infogerance/[ville]`)
-3. Déployer preview Vercel (`preview.proxi-it.fr`)
+1. Configurer Odoo CRM (suivre le guide ci-dessus)
+2. Configurer GA4 + GSC (suivre le guide ci-dessus)
+3. Ajouter pages pSEO (`/infogerance/[ville]`)
+4. Déployer preview Vercel (`preview.proxi-it.fr`)
 
 ## Référence
 
