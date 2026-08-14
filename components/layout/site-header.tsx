@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,26 +16,79 @@ type HeaderBarProps = {
 };
 
 function ServicesMenu({ onDarkHero }: { onDarkHero: boolean }) {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    function handlePointerDown(event: MouseEvent | TouchEvent) {
+      if (containerRef.current?.contains(event.target as Node)) {
+        return;
+      }
+
+      setOpen(false);
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("touchstart", handlePointerDown);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("touchstart", handlePointerDown);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [open]);
+
   return (
-    <div className="group relative">
-      <Link
-        href="/infogerance-informatique-bourges"
+    <div
+      ref={containerRef}
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        aria-haspopup="menu"
         className={cn(
-          "inline-flex items-center gap-1 text-sm font-medium transition-colors duration-300",
+          "inline-flex cursor-pointer items-center gap-1 border-0 bg-transparent p-0 text-sm font-medium transition-colors duration-300",
           onDarkHero
             ? "text-white/85 hover:text-white"
             : "text-muted-foreground hover:text-brand-navy",
         )}
-        aria-haspopup="menu"
       >
         <span className="nav-link-baseline">Services IT</span>
         <ChevronDown
-          className="h-4 w-4 opacity-70 transition-transform duration-200 group-hover:rotate-180"
+          className={cn(
+            "h-4 w-4 opacity-70 transition-transform duration-200",
+            open && "rotate-180",
+          )}
           aria-hidden
         />
-      </Link>
+      </button>
 
-      <div className="invisible absolute left-0 top-full z-50 min-w-[14rem] pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+      <div
+        className={cn(
+          "absolute left-0 top-full z-50 min-w-[14rem] pt-2 transition-all duration-150",
+          open ? "visible opacity-100" : "invisible pointer-events-none opacity-0",
+        )}
+      >
         <ul
           role="menu"
           className={cn(
@@ -50,6 +103,7 @@ function ServicesMenu({ onDarkHero }: { onDarkHero: boolean }) {
               <Link
                 href={item.href}
                 role="menuitem"
+                onClick={() => setOpen(false)}
                 className={cn(
                   "block px-4 py-2.5 text-sm transition-colors",
                   onDarkHero

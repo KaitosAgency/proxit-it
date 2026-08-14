@@ -18,9 +18,10 @@ export function ServiceBreadcrumb({ items, className }: ServiceBreadcrumbProps) 
       <ol className="flex flex-wrap items-center gap-1">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
+          const isLink = Boolean(item.path) && !isLast;
 
           return (
-            <li key={item.path} className="flex items-center gap-1">
+            <li key={item.path ?? `${item.name}-${index}`} className="flex items-center gap-1">
               {index > 0 ? (
                 <ChevronRight
                   className="size-3.5 shrink-0 text-slate-300"
@@ -32,13 +33,15 @@ export function ServiceBreadcrumb({ items, className }: ServiceBreadcrumbProps) 
                 <span className="font-medium text-slate-700" aria-current="page">
                   {breadcrumbLabel(item)}
                 </span>
-              ) : (
+              ) : isLink ? (
                 <Link
-                  href={item.path}
+                  href={item.path!}
                   className="transition-colors hover:text-brand-teal"
                 >
                   {breadcrumbLabel(item)}
                 </Link>
+              ) : (
+                <span className="text-slate-500">{breadcrumbLabel(item)}</span>
               )}
             </li>
           );

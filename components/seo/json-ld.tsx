@@ -48,7 +48,8 @@ export function parseFrenchMonthYear(value: string): string | undefined {
 export type BreadcrumbItem = {
   /** Libellé complet pour le JSON-LD et l’accessibilité */
   name: string;
-  path: string;
+  /** Absent = catégorie non cliquable (ex. « Services IT » sans page hub) */
+  path?: string;
   /** Libellé court affiché dans l’UI (évite la redondance avec le H1) */
   shortName?: string;
 };
@@ -130,7 +131,7 @@ function breadcrumbEntity(path: string, breadcrumbs: readonly BreadcrumbItem[]) 
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: `${getSiteUrl()}${item.path}`,
+      ...(item.path ? { item: `${getSiteUrl()}${item.path}` } : {}),
     })),
   };
 }

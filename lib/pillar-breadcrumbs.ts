@@ -30,7 +30,7 @@ export function buildPillarBreadcrumbs({
 
   return [
     { name: "Accueil", path: "/" },
-    { name: hubLabel, path: hubPath },
+    { name: hubLabel, shortName: hubLabel },
     { name: title, path, shortName: pageShortName },
   ];
 }
