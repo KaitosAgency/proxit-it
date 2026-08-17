@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
+import { isSmtpConfigured, sendContactEmail } from "@/lib/contact/smtp";
 import { isOdooConfigured } from "@/lib/odoo/client";
 import { createContactOpportunity, type ContactLeadPayload } from "@/lib/odoo/crm-lead";
 import { sendContactWebhook } from "@/lib/odoo/webhook";
 import { contactTopicLabels } from "@/lib/site";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function logContactSuccess(via: string, details: Record<string, unknown>): void {
+  if (process.env.NODE_ENV === "production") {
+    return;
+  }
+
+  console.info(`[contact] OK via ${via}`, details);
+}
 
 function normalizePayload(body: ContactLeadPayload): ContactLeadPayload {
   return {
@@ -45,31 +54,34 @@ export async function POST(request: Request) {
   try {
     if (isOdooConfigured()) {
       const leadId = await createContactOpportunity(payload);
+      logContactSuccess("odoo", { odooLeadId: leadId, email: payload.email });
       return NextResponse.json({ ok: true, odooLeadId: leadId });
     }
 
     if (process.env.ODOO_WEBHOOK_URL) {
       await sendContactWebhook(payload);
+      logContactSuccess("webhook", { email: payload.email });
       return NextResponse.json({ ok: true, via: "webhook" });
     }
 
-    if (process.env.RESEND_API_KEY) {
-      // TODO: brancher Resend en secours si Odoo indisponible
-      console.info("[contact] RESEND_API_KEY présent — envoi email à brancher", payload);
-      return NextResponse.json({ ok: true, via: "email" });
+    if (isSmtpConfigured()) {
+      await sendContactEmail(payload);
+      logContactSuccess("smtp", { email: payload.email, to: process.env.CONTACT_TO?.trim() });
+      return NextResponse.json({ ok: true, via: "smtp" });
     }
 
     if (process.env.NODE_ENV === "production") {
       return NextResponse.json(
         {
           error:
-            "Formulaire indisponible : configurez Odoo (ODOO_URL, ODOO_DB, ODOO_LOGIN, ODOO_API_KEY).",
+            "Formulaire indisponible : configurez Odoo, un webhook (ODOO_WEBHOOK_URL) ou SMTP OVH (SMTP_HOST, SMTP_USER, SMTP_PASS, CONTACT_TO).",
         },
         { status: 503 },
       );
     }
 
     console.info("[contact] Nouvelle demande Proxi IT (dev)", payload);
+    logContactSuccess("dev-log", { email: payload.email });
     return NextResponse.json({ ok: true, via: "dev-log" });
   } catch (error) {
     console.error("[contact] Échec envoi", error);

@@ -58,7 +58,114 @@ app/                 Routes Next.js
 components/          UI, sections, layout, SEO
 lib/site.ts          Constantes marque (NAP, nav, FAQ, stats, etc.)
 public/              Logo clean (long light/dark, mid), llms.txt
+components/forms/    Formulaire contact (client)
+app/api/contact/     Route API — validation + envoi Odoo / fallbacks
+lib/odoo/            Client JSON-RPC, webhook, mapping CRM
+lib/contact/         E-mail secours SMTP OVH
+lib/analytics-events.ts  Événements GA4 côté navigateur
 ```
+
+## Formulaire de contact
+
+Page **`/contact`** — composant `ContactForm` → route **`POST /api/contact`**.
+
+### Champs collectés
+
+| Champ | Obligatoire | Envoyé à Odoo / webhook |
+|---|---|---|
+| Nom | Oui | `contact_name` (opportunité) |
+| E-mail | Oui | `email_from` |
+| Société | Oui | `partner_name` |
+| Téléphone | Non | `phone` |
+| Sujet (infogérance, Odoo, etc.) | Oui | Ligne dans la description du lead |
+| « Comment nous avez-vous connu ? » | Non | Ligne dans la description |
+| Message | Oui | Corps de la description |
+
+Validation côté serveur : champs obligatoires, format e-mail, sujet dans la liste autorisée (`lib/site.ts`).
+
+### Parcours technique
+
+```
+Visiteur soumet le formulaire (navigateur)
+         ↓
+POST /api/contact (JSON)
+         ↓
+Validation serveur
+         ↓
+┌─ Odoo API configurée ? ──→ crm.lead create (opportunité CRM)
+│
+├─ Sinon ODOO_WEBHOOK_URL ? ──→ POST JSON vers n8n / controller custom
+│
+├─ Sinon SMTP OVH configuré ? ──→ e-mail vers CONTACT_TO
+│
+├─ Sinon production ──→ 503 « Formulaire indisponible »
+│
+└─ Sinon dev ──→ log console + réponse OK
+         ↓
+Si réponse OK (2xx) : message « Message envoyé » côté UI
+         ↓
+Si cookies analytics acceptés + GA4 configuré :
+  événement GA4 generate_lead (voir ci-dessous)
+```
+
+**Priorité stricte :** Odoo API d’abord, puis webhook, puis email de secours. Une seule destination par soumission.
+
+En **développement** (`npm run dev`), sans aucune config, la payload est loguée en console — pratique pour tester l’UI sans Odoo.
+
+### Odoo CRM (recommandé)
+
+Crée une **opportunité** (`crm.lead`, type `opportunity`) — équivalent du formulaire Website Builder Odoo.
+
+- Sujet du lead : `ODOO_LEAD_SUBJECT` ou défaut `Nouveau contact site web`
+- Équipe / vendeur : paramètres Odoo `proxi_website.crm_team_id` et `proxi_website.crm_user_id`, ou secours `ODOO_CRM_TEAM_ID` / `ODOO_CRM_USER_ID`
+
+Guide détaillé : [Intégration Odoo CRM](../../../Repos/kaitos-book/spaces/proxi-it/documents/audit-proxi-it/pages/odoo-form-integration.md)
+
+### Fallbacks (sans Odoo API)
+
+| Mécanisme | Variables | État |
+|---|---|---|
+| Webhook | `ODOO_WEBHOOK_URL` | **Actif** — POST JSON `{ source: "proxi-it-website", ...payload }` |
+| E-mail SMTP OVH | `SMTP_HOST`, `SMTP_USER`, `SMTP_PASS`, `CONTACT_TO` (+ optionnels ci-dessous) | **Actif** — notification par mail si Odoo absent |
+
+Variables SMTP optionnelles : `SMTP_PORT` (défaut `587`), `SMTP_SECURE` (`false` en 587, `true` en 465), `SMTP_FROM`, `CONTACT_EMAIL_SUBJECT`.
+
+Exemple OVH : `SMTP_HOST=ssl0.ovh.net`, port `587`, identifiants du compte mail OVH.
+
+### Google Analytics 4 (conversion)
+
+Ce n’est **pas** une notification serveur : c’est un **événement côté navigateur**, déclenché **uniquement après** une soumission réussie (`/api/contact` → HTTP 2xx).
+
+**Conditions cumulées :**
+
+1. `NEXT_PUBLIC_GA_MEASUREMENT_ID` défini (ex. `G-XXXXXXXXXX`)
+2. Visiteur a **accepté** les cookies analytics (bandeau cookies + Consent Mode v2)
+3. Le formulaire a reçu une réponse succès du serveur
+
+**Événement envoyé** (`lib/analytics-events.ts`) :
+
+| Propriété GA4 | Valeur |
+|---|---|
+| Nom d’événement | `generate_lead` |
+| `method` | `contact_form` |
+| `topic` | Libellé du sujet choisi (ex. « Infogérance », « Intégration Odoo ») |
+
+Dans GA4 Admin, marquer `generate_lead` comme **événement clé / conversion** pour le suivi des leads site.
+
+Si le visiteur **refuse** les cookies analytics, le lead part quand même vers Odoo (ou webhook) — seul le tracking GA4 est absent.
+
+Guide GA4 + GSC : [Google Analytics et Search Console](../../../Repos/kaitos-book/spaces/proxi-it/documents/audit-proxi-it/pages/google-analytics-gsc.md)
+
+### Fichiers concernés
+
+| Fichier | Rôle |
+|---|---|
+| `components/forms/contact-form.tsx` | UI, envoi fetch, déclenchement GA4 |
+| `app/api/contact/route.ts` | Validation + chaîne Odoo / webhook / secours |
+| `lib/odoo/crm-lead.ts` | Mapping payload → opportunité CRM |
+| `lib/odoo/webhook.ts` | Envoi webhook JSON |
+| `lib/contact/smtp.ts` | Envoi e-mail secours (SMTP OVH) |
+| `lib/analytics-events.ts` | `trackContactFormSubmit` → `generate_lead` |
 
 ## Variables d'environnement
 
@@ -79,7 +186,15 @@ public/              Logo clean (long light/dark, mid), llms.txt
 | `ODOO_CRM_USER_ID` | Non | Secours env si param. Odoo absent |
 | **Alternatives au lieu d'Odoo API** | | |
 | `ODOO_WEBHOOK_URL` | Non | Webhook n8n / controller (sans les 4 vars Odoo ci-dessus) |
-| `RESEND_API_KEY` + `CONTACT_TO` | Non | Email secours |
+| **SMTP OVH (secours e-mail)** | | |
+| `SMTP_HOST` | Oui (si SMTP) | Relais OVH — ex. `ssl0.ovh.net` |
+| `SMTP_PORT` | Non | Défaut `587` (STARTTLS) ; `465` pour SSL |
+| `SMTP_SECURE` | Non | `true` si port 465, sinon `false` |
+| `SMTP_USER` | Oui (si SMTP) | Adresse mail OVH complète |
+| `SMTP_PASS` | Oui (si SMTP) | Mot de passe du compte mail |
+| `SMTP_FROM` | Non | Expéditeur — défaut `Proxi IT <SMTP_USER>` |
+| `CONTACT_TO` | Oui (si SMTP) | Destinataire des leads (ex. `contact@proxi-it.fr`) |
+| `CONTACT_EMAIL_SUBJECT` | Non | Préfixe sujet — défaut `[Site web] {sujet} — {société}` |
 
 **En résumé :** pour Odoo, il faut **4 variables** (`URL`, `DB`, `LOGIN`, `API_KEY`). Le reste est optionnel ou se configure dans Odoo. Sans aucune de ces configs, le formulaire ne part pas en production (sauf mode dev qui logue en console).
 
@@ -94,7 +209,7 @@ Dans Odoo : **Paramètres → Technique → Paramètres système**, créer :
 
 Proxi IT modifie équipe / vendeur ici — équivalent du sélecteur dans l'éditeur de formulaire Odoo Website.
 
-En développement, le formulaire logue la payload si Odoo n'est pas configuré. En production, Odoo API est requis (ou webhook / email de secours).
+Comportement complet du formulaire (fallbacks, GA4) : section [Formulaire de contact](#formulaire-de-contact) ci-dessus.
 
 ## SEO
 
@@ -107,7 +222,7 @@ En développement, le formulaire logue la payload si Odoo n'est pas configuré. 
 - **Robots** : `/robots.txt` (auto-généré)
 - **Google Analytics 4** : si `NEXT_PUBLIC_GA_MEASUREMENT_ID` est défini (chargé **après consentement** via bandeau cookies)
 - **Google Search Console** : vérification via `GOOGLE_SITE_VERIFICATION`
-- **Conversion GA4** : événement `generate_lead` à chaque formulaire contact envoyé
+- **Conversion formulaire contact** : événement GA4 `generate_lead` — voir section [Formulaire de contact](#formulaire-de-contact)
 
 | Variable | Obligatoire ? | Rôle |
 |---|---|---|

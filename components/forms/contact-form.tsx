@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { CheckCircle2, Clock, Phone } from "lucide-react";
 import { trackContactFormSubmit } from "@/lib/analytics-events";
-import { attributionOptions, contactTopicOptions, getContactTopicLabel } from "@/lib/site";
+import { attributionOptions, contactTopicOptions, getContactTopicLabel, site } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LinkButton } from "@/components/ui/link-button";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -18,11 +20,83 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 type FormState = "idle" | "loading" | "success" | "error";
 
+type SubmittedSummary = {
+  name: string;
+  topic: string;
+};
+
+function ContactFormSuccess({
+  summary,
+  onReset,
+}: {
+  summary: SubmittedSummary;
+  onReset: () => void;
+}) {
+  const firstName = summary.name.trim().split(/\s+/)[0] || summary.name;
+
+  return (
+    <Card variant="outline" className="rounded-2xl">
+      <CardContent className="flex flex-col items-center px-6 py-10 text-center md:px-10 md:py-12">
+        <div
+          className="flex size-16 items-center justify-center rounded-full bg-brand-teal/10"
+          aria-hidden
+        >
+          <CheckCircle2 className="size-8 text-brand-teal" strokeWidth={2} />
+        </div>
+
+        <div className="mt-5 max-w-md space-y-2">
+          <h2 className="text-xl font-bold text-brand-teal md:text-2xl">Message envoyé</h2>
+          <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
+            Merci {firstName}, votre demande concernant{" "}
+            <span className="font-medium text-brand-navy">{summary.topic}</span> a bien été
+            transmise à l&apos;équipe Proxi IT.
+          </p>
+        </div>
+
+        <div className="mt-8 w-full max-w-md rounded-xl border border-slate-200/80 bg-slate-50/80 p-5">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-teal">
+            Prochaines étapes
+          </p>
+          <ul className="mt-4 space-y-4 text-sm text-muted-foreground">
+            <li className="flex flex-col items-center gap-2">
+              <Clock className="size-4 text-brand-teal" aria-hidden />
+              <span>
+                Un conseiller vous recontacte sous <strong className="text-brand-navy">24 h ouvrées</strong>{" "}
+                (souvent bien plus vite).
+              </span>
+            </li>
+            <li className="flex flex-col items-center gap-2">
+              <Phone className="size-4 text-brand-teal" aria-hidden />
+              <span>
+                Besoin urgent ? Appelez-nous au{" "}
+                <a href={site.phoneHref} className="font-medium text-brand-navy hover:text-brand-teal">
+                  {site.phone}
+                </a>
+                .
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Button variant="brandOutline" onClick={onReset}>
+            Envoyer un autre message
+          </Button>
+          <LinkButton href="/" variant="brand" size="default">
+            Retour à l&apos;accueil
+          </LinkButton>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function ContactForm() {
   const [state, setState] = useState<FormState>("idle");
   const [error, setError] = useState<string | null>(null);
   const [topic, setTopic] = useState("");
   const [attribution, setAttribution] = useState("");
+  const [submittedSummary, setSubmittedSummary] = useState<SubmittedSummary | null>(null);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -48,35 +122,39 @@ export function ContactForm() {
         body: JSON.stringify(payload),
       });
 
+      const data = (await response.json()) as { ok?: boolean; via?: string; error?: string };
+
       if (!response.ok) {
-        const data = (await response.json()) as { error?: string };
         throw new Error(data.error ?? "Une erreur est survenue.");
       }
 
+      if (process.env.NODE_ENV === "development") {
+        console.info("[contact-form] Envoi réussi", data);
+      }
+
       trackContactFormSubmit(topicLabel);
-      setState("success");
-      event.currentTarget.reset();
+      setSubmittedSummary({
+        name: String(payload.name),
+        topic: topicLabel,
+      });
       setTopic("");
       setAttribution("");
+      setState("success");
     } catch (err) {
       setState("error");
       setError(err instanceof Error ? err.message : "Une erreur est survenue.");
     }
   }
 
-  if (state === "success") {
+  if (state === "success" && submittedSummary) {
     return (
-      <Card variant="outline" className="rounded-2xl">
-        <CardHeader variant="section">
-          <CardTitle variant="success">Message envoyé</CardTitle>
-          <CardDescription>Nous revenons vers vous sous 24h ouvrées.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button variant="brandOutline" onClick={() => setState("idle")}>
-            Envoyer un autre message
-          </Button>
-        </CardContent>
-      </Card>
+      <ContactFormSuccess
+        summary={submittedSummary}
+        onReset={() => {
+          setSubmittedSummary(null);
+          setState("idle");
+        }}
+      />
     );
   }
 
