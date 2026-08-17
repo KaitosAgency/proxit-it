@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { SectionHeader } from "@/components/sections/section-header";
 import { getSurfaceGridCellClass, SurfaceGrid } from "@/components/sections/surface-grid";
+import { routes } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export type RelatedService = {
@@ -20,13 +21,13 @@ export type RelatedService = {
 };
 
 const iconByHref: Record<string, LucideIcon> = {
-  "/services-manages-bourges": Clock,
-  "/cybersecurite-pme-bourges": Shield,
-  "/sauvegarde-entreprise-bourges": HardDrive,
-  "/integrateur-odoo-bourges": Package,
-  "/infogerance-informatique-bourges": Wrench,
-  "/contact": Phone,
-  "/contact#carte": MapPin,
+  [routes.supervision]: Clock,
+  [routes.cybersecurite]: Shield,
+  [routes.sauvegarde]: HardDrive,
+  [routes.odoo]: Package,
+  [routes.infogerance]: Wrench,
+  [routes.contact]: Phone,
+  [`${routes.contact}#carte`]: MapPin,
 };
 
 function FeatureIcon({ icon: Icon }: { icon: LucideIcon }) {

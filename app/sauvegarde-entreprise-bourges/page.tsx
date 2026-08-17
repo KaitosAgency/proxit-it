@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { PillarServicePageLayout } from "@/components/sections/pillar-service-page-layout";
 import { createServicePageMetadata } from "@/lib/service-page-metadata";
+import { routes } from "@/lib/site";
 
 export const metadata: Metadata = createServicePageMetadata({
   title: "Sauvegarde informatique entreprise à Bourges (18)",
   description:
-    "Sauvegardes automatisées et plan de reprise d'activité pour entreprises à Bourges. Backup chiffré, tests de restauration, supervision 24/7. Devis gratuit.",
+    "Sauvegardes entreprise à Bourges : backup chiffré, tests trimestriels, PRA formalisé. 8 rue Jules Ferry. Devis gratuit.",
   path: "/sauvegarde-entreprise-bourges",
 });
 
@@ -80,8 +81,8 @@ export default function SauvegardePage() {
           details:
             "Monitoring proactif : vous n'apprenez pas qu'une sauvegarde a échoué le jour où vous en avez besoin. Intervention corrective sous 4 h ouvrées.",
           relatedLink: {
-            href: "/services-manages-bourges",
-            label: "Découvrir nos services managés 24/7",
+            href: routes.supervision,
+            label: "Découvrir notre supervision 24/7",
           },
         },
       ]}
@@ -188,8 +189,8 @@ export default function SauvegardePage() {
           description: "Maintenance, support et sauvegardes de base incluses.",
         },
         {
-          href: "/services-manages-bourges",
-          label: "Services managés 24/7",
+          href: routes.supervision,
+          label: "Supervision informatique 24/7",
           description: "Supervision avancée des jobs de backup et alertes.",
         },
         {

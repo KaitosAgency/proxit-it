@@ -3,7 +3,7 @@
 
 ## Services
 - [Infogérance](https://www.proxi-it.fr/infogerance-informatique-bourges)
-- [Services managés](https://www.proxi-it.fr/services-manages-bourges)
+- [Supervision informatique 24/7](https://www.proxi-it.fr/supervision-informatique-bourges)
 - [Cybersécurité PME](https://www.proxi-it.fr/cybersecurite-pme-bourges)
 - [Sauvegardes entreprise](https://www.proxi-it.fr/sauvegarde-entreprise-bourges)
 - [Intégrateur Odoo](https://www.proxi-it.fr/integrateur-odoo-bourges)

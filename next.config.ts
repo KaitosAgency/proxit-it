@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/services-manages-bourges",
+        destination: "/supervision-informatique-bourges",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

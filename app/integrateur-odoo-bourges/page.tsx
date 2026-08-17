@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { PillarServicePageLayout } from "@/components/sections/pillar-service-page-layout";
 import { createServicePageMetadata } from "@/lib/service-page-metadata";
+import { routes } from "@/lib/site";
 
 export const metadata: Metadata = createServicePageMetadata({
-  title: "Intégrateur Odoo à Bourges (18)",
+  title: "Intégrateur Odoo certifié à Bourges (18)",
   description:
-    "Proxi IT, seul partenaire Odoo Learning Partner basé à Bourges. ERP, CRM, facturation électronique 2026-2027 pour les entreprises du Cher. Démo gratuite.",
+    "Intégrateur Odoo certifié à Bourges : ERP, CRM, facturation électronique 2026-2027. 8 rue Jules Ferry. Démo gratuite.",
   path: "/integrateur-odoo-bourges",
 });
 
@@ -201,8 +202,8 @@ export default function OdooPage() {
           description: "Démo personnalisée gratuite, réponse sous 48 h.",
         },
         {
-          href: "/services-manages-bourges",
-          label: "Services managés 24/7",
+          href: routes.supervision,
+          label: "Supervision informatique 24/7",
           description: "Supervision de votre infrastructure Odoo.",
         },
         {

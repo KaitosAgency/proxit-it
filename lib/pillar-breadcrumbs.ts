@@ -1,11 +1,12 @@
 import type { BreadcrumbItem } from "@/components/seo/json-ld";
+import { routes } from "@/lib/site";
 
 const PILLAR_SHORT_NAMES: Record<string, string> = {
-  "/infogerance-informatique-bourges": "Infogérance informatique",
-  "/services-manages-bourges": "Services managés",
-  "/cybersecurite-pme-bourges": "Cybersécurité",
-  "/sauvegarde-entreprise-bourges": "Sauvegardes",
-  "/integrateur-odoo-bourges": "Intégrateur Odoo",
+  [routes.infogerance]: "Infogérance informatique",
+  [routes.supervision]: "Supervision 24/7",
+  [routes.cybersecurite]: "Cybersécurité",
+  [routes.sauvegarde]: "Sauvegardes",
+  [routes.odoo]: "Intégrateur Odoo",
 };
 
 export function buildPillarBreadcrumbs({

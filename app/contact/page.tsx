@@ -6,9 +6,9 @@ import { site } from "@/lib/site";
 import { Mail, MapPin, Phone } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact à Bourges (18)",
   description:
-    "Contactez Proxi IT à Bourges pour un devis infogérance ou une démo Odoo. 8 rue Jules Ferry, 18000 Bourges.",
+    "Contactez Proxi IT à Bourges : devis infogérance ou démo Odoo. Réponse sous 24h. 8 rue Jules Ferry, 18000 Bourges. ☎ 02 18 15 05 30.",
 };
 
 export default function ContactPage() {

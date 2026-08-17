@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, JetBrains_Mono } from "next/font/google";
 import { CookieConsentManager } from "@/components/consent/cookie-consent-manager";
 import { GoogleConsentDefaults } from "@/components/consent/google-consent-defaults";
+import { AnimatedTabTitle } from "@/components/layout/animated-tab-title";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/seo/json-ld";
@@ -49,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fr" className={cn("h-full", geist.variable, jetbrainsMono.variable, "font-sans")}>
       <body className="flex min-h-full flex-col bg-background text-foreground">
         {isGoogleAnalyticsEnabled() ? <GoogleConsentDefaults /> : null}
+        <AnimatedTabTitle />
         <JsonLd data={organizationJsonLd()} />
         <JsonLd data={websiteJsonLd()} />
         <SiteHeader />

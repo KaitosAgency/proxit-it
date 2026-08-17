@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { TrustSection } from "@/components/sections/trust-section";
 import { getSurfaceGridCellClass, SurfaceGrid } from "@/components/sections/surface-grid";
+import { routes } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type Feature = {
@@ -24,42 +25,42 @@ const features: Feature[] = [
     title: "Supervision 24/7",
     description:
       "Monitoring continu, alertes proactives et gestion des incidents avant qu'ils bloquent votre activité.",
-    href: "/services-manages-bourges",
+    href: routes.supervision,
     icon: Clock,
   },
   {
     title: "Infogérance complète",
     description:
       "Maintenance préventive, visites sur site et gestion de votre parc informatique au quotidien.",
-    href: "/infogerance-informatique-bourges",
+    href: routes.infogerance,
     icon: Wrench,
   },
   {
     title: "Cybersécurité",
     description:
       "Mises à jour, sauvegardes, gestion des accès et sensibilisation de vos équipes.",
-    href: "/cybersecurite-pme-bourges",
+    href: routes.cybersecurite,
     icon: Shield,
   },
   {
     title: "Sauvegardes fiables",
     description:
       "Backup automatisé, tests de restauration et plan de reprise d'activité pour vos données.",
-    href: "/sauvegarde-entreprise-bourges",
+    href: routes.sauvegarde,
     icon: HardDrive,
   },
   {
     title: "Proximité locale",
     description:
       "Basés à Bourges, intervention sur site dans le Cher avec un interlocuteur unique et réactif.",
-    href: "/contact",
+    href: routes.contact,
     icon: MapPin,
   },
   {
     title: "Odoo certifié",
     description:
       "Partenaire Odoo Learning Partner : ERP, CRM et facturation électronique avec le même prestataire.",
-    href: "/integrateur-odoo-bourges",
+    href: routes.odoo,
     icon: Package,
   },
 ];

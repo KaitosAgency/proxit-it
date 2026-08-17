@@ -1,10 +1,11 @@
 import { LinkButton } from "@/components/ui/link-button";
+import { routes } from "@/lib/site";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const offers = [
   {
-    level: "Services managés",
+    level: "Supervision 24/7",
     title: "Supervision complète",
     subtitle: "Gestion proactive 24/7",
     description:
@@ -17,7 +18,7 @@ const offers = [
       "Sécurité informatique et gestion préventive du parc",
       "Support illimité et dépannage sur site",
     ],
-    href: "/services-manages-bourges",
+    href: routes.supervision,
     highlighted: true,
   },
   {
@@ -33,7 +34,7 @@ const offers = [
       "Visites de contrôle",
       "Assistance à distance illimitée",
     ],
-    href: "/infogerance-informatique-bourges",
+    href: routes.infogerance,
     highlighted: false,
   },
 ] as const;

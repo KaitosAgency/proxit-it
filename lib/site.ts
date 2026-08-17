@@ -1,9 +1,18 @@
+export const routes = {
+  supervision: "/supervision-informatique-bourges",
+  infogerance: "/infogerance-informatique-bourges",
+  cybersecurite: "/cybersecurite-pme-bourges",
+  sauvegarde: "/sauvegarde-entreprise-bourges",
+  odoo: "/integrateur-odoo-bourges",
+  contact: "/contact",
+} as const;
+
 export const site = {
   name: "Proxi IT",
   legalName: "PROXI IT",
   tagline: "Votre informatique, on s'en occupe.",
   description:
-    "Infogérance et services managés pour les entreprises à Bourges et dans le Cher. Supervision 24/7, maintenance proactive, support humain. Intégrateur Odoo certifié.",
+    "Infogérance et supervision 24/7 pour les entreprises à Bourges (Cher 18). Support sous 4h, maintenance proactive, interlocuteur unique. Basés 8 rue Jules Ferry. Intégrateur Odoo certifié.",
   phone: "+33 2 18 15 05 30",
   phoneHref: "tel:+33218150530",
   email: "contact@proxi-it.fr",
@@ -157,15 +166,15 @@ export const logos = {
 
 export const nav = {
   services: [
-    { label: "Supervision 24/7", href: "/services-manages-bourges" },
-    { label: "Infogérance", href: "/infogerance-informatique-bourges" },
-    { label: "Cybersécurité", href: "/cybersecurite-pme-bourges" },
-    { label: "Sauvegardes", href: "/sauvegarde-entreprise-bourges" },
+    { label: "Supervision 24/7", href: routes.supervision },
+    { label: "Infogérance", href: routes.infogerance },
+    { label: "Cybersécurité", href: routes.cybersecurite },
+    { label: "Sauvegardes", href: routes.sauvegarde },
   ],
   main: [
-    { label: "Services IT", href: "/infogerance-informatique-bourges" },
-    { label: "Odoo", href: "/integrateur-odoo-bourges" },
-    { label: "Contact", href: "/contact" },
+    { label: "Services IT", href: routes.infogerance },
+    { label: "Odoo", href: routes.odoo },
+    { label: "Contact", href: routes.contact },
   ],
 } as const;
 
@@ -194,6 +203,17 @@ export const statsBandBadges = [
   { label: "Intervention sur site" },
   { label: "Interlocuteur unique" },
 ] as const;
+
+/** Rotation de l'onglet navigateur — uniquement quand l'utilisateur quitte l'onglet (SEO : le title SSR reste inchangé). */
+export const hiddenTabTitle = {
+  intervalMs: 2500,
+  messages: [
+    "Votre IT, on s'en occupe.",
+    "Support sous 4h · Bourges",
+    "Supervision 24/7",
+    "Devis gratuit →",
+  ],
+} as const;
 
 // Messages dynamiques selon le moment (timezone Europe/Paris)
 export const statsBandMessages = {
@@ -336,7 +356,7 @@ export const homeFaq = [
 ] as const;
 
 export const contactTopicOptions = [
-  { value: "infogerance", label: "Infogérance / services managés" },
+  { value: "infogerance", label: "Infogérance / supervision 24/7" },
   { value: "odoo", label: "Intégration Odoo" },
   { value: "other", label: "Autre" },
 ] as const;

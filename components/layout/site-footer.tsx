@@ -19,8 +19,8 @@ export function SiteFooter() {
             />
           </Link>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-400">
-            Infogérance et services managés à Bourges depuis {site.experienceYears} ans.
-            Supervision 24/7, maintenance proactive, intégrateur Odoo certifié.
+            Infogérance et supervision 24/7 à Bourges depuis {site.experienceYears} ans.
+            Support sous 4h, maintenance proactive, intégrateur Odoo certifié.
           </p>
           <Link
             href="/integrateur-odoo-bourges"

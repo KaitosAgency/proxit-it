@@ -3,7 +3,8 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
-  description: "Mentions légales du site Proxi IT.",
+  description:
+    "Mentions légales de Proxi IT, prestataire informatique basé à Bourges : éditeur, hébergement, propriété intellectuelle.",
 };
 
 export default function MentionsLegalesPage() {

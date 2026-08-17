@@ -1,24 +1,25 @@
 import type { Metadata } from "next";
 import { PillarServicePageLayout } from "@/components/sections/pillar-service-page-layout";
 import { createServicePageMetadata } from "@/lib/service-page-metadata";
+import { routes } from "@/lib/site";
 
 export const metadata: Metadata = createServicePageMetadata({
-  title: "Supervision et services managés à Bourges (18)",
+  title: "Supervision informatique 24/7 à Bourges (18)",
   description:
-    "Services managés et supervision 24/7 pour entreprises à Bourges : monitoring proactif, helpdesk illimité, gestion des incidents. MSP local dans le Cher. Devis gratuit.",
-  path: "/services-manages-bourges",
+    "Supervision informatique 24/7 à Bourges : monitoring proactif, helpdesk illimité, intervention sous 4h. 8 rue Jules Ferry. Devis gratuit.",
+  path: routes.supervision,
 });
 
-export default function ServicesManagesPage() {
+export default function SupervisionPage() {
   return (
     <PillarServicePageLayout
-      title="Supervision complète et services managés à Bourges"
-      path="/services-manages-bourges"
+      title="Supervision informatique 24/7 à Bourges"
+      path={routes.supervision}
       serviceLabel="Services IT · Bourges"
       updatedAt="août 2026"
       contentSection={{
         label: "Supervision 24/7",
-        title: "Ce que couvrent nos services managés à Bourges",
+        title: "Ce que couvre notre supervision 24/7 à Bourges",
         description:
           "Quatre piliers pour les entreprises du Cher dont l'infrastructure ne doit jamais s'arrêter : monitoring, incidents, sécurité et reporting.",
       }}
@@ -27,7 +28,7 @@ export default function ServicesManagesPage() {
         title: "Un niveau de service adapté à votre criticité",
         description:
           "Supervision avancée au poste ou par serveur. Contrat évolutif selon la complexité de votre parc.",
-        includedLabel: "Services managés",
+        includedLabel: "Supervision 24/7",
         includedDescription:
           "Monitoring proactif, helpdesk illimité et gestion des incidents pour votre parc informatique à Bourges.",
       }}
@@ -37,7 +38,7 @@ export default function ServicesManagesPage() {
         description:
           "Un déploiement structuré pour passer d'une IT réactive à une infrastructure supervisée en permanence.",
       }}
-      faqTitle="Tout sur les services managés à Bourges"
+      faqTitle="Tout sur la supervision informatique à Bourges"
       intro="Proxi IT supervise votre parc informatique 24 h/24 et 7 j/7 à Bourges (18) : alertes proactives, helpdesk illimité et gestion des incidents avant qu'ils bloquent votre activité. Basés 8 rue Jules Ferry, nous monitorons 300+ postes et serveurs pour 50+ clients depuis 15 ans."
       bullets={[
         "Monitoring et supervision 24 h/24 et 7 j/7",
@@ -62,7 +63,7 @@ export default function ServicesManagesPage() {
           details:
             "Procédures documentées par type d'incident (serveur down, réseau coupé, ransomware suspecté). Astreinte 7j/7 pour les parcs critiques. Vous n'avez plus à coordonner plusieurs prestataires.",
           relatedLink: {
-            href: "/infogerance-informatique-bourges",
+            href: routes.infogerance,
             label: "Comparer avec l'infogérance classique",
           },
         },
@@ -73,7 +74,7 @@ export default function ServicesManagesPage() {
           details:
             "Inventaire des logiciels, gestion des versions obsolètes et tests avant déploiement massif. Réduction de la surface d'attaque sans bloquer la productivité de vos équipes.",
           relatedLink: {
-            href: "/cybersecurite-pme-bourges",
+            href: routes.cybersecurite,
             label: "En savoir plus sur la cybersécurité PME",
           },
         },
@@ -97,7 +98,7 @@ export default function ServicesManagesPage() {
             "Vous gérez plusieurs sites dans le Cher et les départements limitrophes. Proxi IT centralise la supervision et intervient sur site dans un rayon de 80 km autour de Bourges.",
         },
         {
-          title: "Structure passant de l'infogérance aux services managés",
+          title: "Structure passant de l'infogérance à la supervision 24/7",
           description:
             "Votre parc a grossi ou vos enjeux de disponibilité ont augmenté. Vous complétez votre contrat d'infogérance par une supervision avancée sans changer de prestataire.",
         },
@@ -129,9 +130,9 @@ export default function ServicesManagesPage() {
         },
       ]}
       differentiator={{
-        title: "Services managés ou infogérance classique : quelle différence ?",
+        title: "Supervision 24/7 ou infogérance classique : quelle différence ?",
         paragraphs: [
-          "Les services managés chez Proxi IT ajoutent une supervision 24 h/24 et 7 j/7, un monitoring proactif et une gestion des incidents en amont. C'est le niveau supérieur pour les parcs avec serveurs critiques ou forte exigence de disponibilité.",
+          "La supervision 24/7 chez Proxi IT ajoute un monitoring proactif, des alertes automatiques et une gestion des incidents en amont. C'est le niveau supérieur pour les parcs avec serveurs critiques ou forte exigence de disponibilité.",
           "L'infogérance classique couvre la maintenance, le support et la gestion quotidienne. Elle convient aux parcs de 5 à 30 postes sans infrastructure complexe. Les deux offres peuvent être combinées.",
           "Dans les deux cas, même interlocuteur unique basé 8 rue Jules Ferry à Bourges, sans centre d'appels national ni ticket perdu.",
         ],
@@ -146,14 +147,14 @@ export default function ServicesManagesPage() {
       ]}
       faq={[
         {
-          question: "Combien coûtent les services managés à Bourges ?",
+          question: "Combien coûte la supervision informatique 24/7 à Bourges ?",
           answer:
             "Le tarif dépend du nombre de postes, serveurs et du niveau d'astreinte. Comptez 20 à 35€ HT/mois par poste pour une supervision avancée incluant monitoring 24/7. Devis personnalisé gratuit selon votre parc et votre criticité.",
         },
         {
           question: "Quelle différence avec l'infogérance ?",
           answer:
-            "L'infogérance couvre maintenance et support quotidien. Les services managés ajoutent monitoring proactif 24/7, alertes automatiques, gestion avancée des incidents et reporting. Recommandé dès que vous avez des serveurs critiques ou plus de 15 postes.",
+            "L'infogérance couvre maintenance et support quotidien. La supervision 24/7 ajoute monitoring proactif, alertes automatiques, gestion avancée des incidents et reporting. Recommandé dès que vous avez des serveurs critiques ou plus de 15 postes.",
         },
         {
           question: "Supervisez-vous Azure, OVH et serveurs locaux ?",
@@ -166,9 +167,9 @@ export default function ServicesManagesPage() {
             "Oui, en option pour les contrats avec serveurs critiques. Astreinte 7j/7 avec intervention sur site dans le Cher sous 4 h en criticité haute (serveur indisponible, réseau coupé).",
         },
         {
-          question: "Puis-je garder Proxi IT si je passe aux services managés ?",
+          question: "Puis-je garder Proxi IT si je passe à la supervision 24/7 ?",
           answer:
-            "Oui. La plupart de nos clients services managés étaient déjà en infogérance chez Proxi IT. Le passage se fait sans rupture : même équipe, même adresse 8 rue Jules Ferry, déploiement progressif des agents de supervision.",
+            "Oui. La plupart de nos clients en supervision 24/7 étaient déjà en infogérance chez Proxi IT. Le passage se fait sans rupture : même équipe, même adresse 8 rue Jules Ferry, déploiement progressif des agents de supervision.",
         },
         {
           question: "Quel délai pour déployer la supervision ?",
@@ -178,32 +179,32 @@ export default function ServicesManagesPage() {
       ]}
       relatedServices={[
         {
-          href: "/infogerance-informatique-bourges",
+          href: routes.infogerance,
           label: "Infogérance informatique",
           description: "Maintenance, support et gestion quotidienne de votre parc.",
         },
         {
-          href: "/cybersecurite-pme-bourges",
+          href: routes.cybersecurite,
           label: "Cybersécurité PME",
           description: "Protection des données, pare-feu et sensibilisation des équipes.",
         },
         {
-          href: "/sauvegarde-entreprise-bourges",
+          href: routes.sauvegarde,
           label: "Sauvegardes entreprise",
           description: "Backup automatisé, tests de restauration et plan de reprise.",
         },
         {
-          href: "/contact",
+          href: routes.contact,
           label: "Demander un devis",
           description: "Devis gratuit, réponse sous 24 h. Indiquez postes et serveurs.",
         },
         {
-          href: "/integrateur-odoo-bourges",
+          href: routes.odoo,
           label: "Intégrateur Odoo Bourges",
           description: "ERP et facturation électronique avec le même interlocuteur IT.",
         },
         {
-          href: "/contact#carte",
+          href: `${routes.contact}#carte`,
           label: "Zone d'intervention",
           description: "Bourges, Cher et Centre-Val de Loire · 8 rue Jules Ferry.",
         },

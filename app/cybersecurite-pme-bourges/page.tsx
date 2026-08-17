@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { PillarServicePageLayout } from "@/components/sections/pillar-service-page-layout";
 import { createServicePageMetadata } from "@/lib/service-page-metadata";
+import { routes } from "@/lib/site";
 
 export const metadata: Metadata = createServicePageMetadata({
   title: "Cybersécurité PME à Bourges (18)",
   description:
-    "Cybersécurité pour entreprises à Bourges : sauvegardes, mises à jour, gestion des accès, sensibilisation anti-ransomware. MSP local dans le Cher. Devis gratuit.",
+    "Cybersécurité PME à Bourges : anti-ransomware, correctifs sous 48h, intervention sous 4h. 8 rue Jules Ferry. Audit gratuit.",
   path: "/cybersecurite-pme-bourges",
 });
 
@@ -184,8 +185,8 @@ export default function CybersecuritePage() {
           description: "Maintenance, support et cybersécurité de base incluse.",
         },
         {
-          href: "/services-manages-bourges",
-          label: "Services managés 24/7",
+          href: routes.supervision,
+          label: "Supervision informatique 24/7",
           description: "Supervision avancée et gestion proactive des incidents.",
         },
         {

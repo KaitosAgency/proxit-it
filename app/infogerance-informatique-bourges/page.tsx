@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { PillarServicePageLayout } from "@/components/sections/pillar-service-page-layout";
 import { createServicePageMetadata } from "@/lib/service-page-metadata";
+import { routes } from "@/lib/site";
 
 export const metadata: Metadata = createServicePageMetadata({
   title: "Infogérance informatique à Bourges (18)",
   description:
-    "Contrat d'infogérance pour les entreprises à Bourges : maintenance proactive, sauvegardes, support illimité. Tarif au poste, sans surprise. Devis gratuit.",
+    "Infogérance informatique Bourges : maintenance 24/7, sauvegardes, support sous 4h. Tarif au poste fixe. Basés 8 rue Jules Ferry. Devis gratuit.",
   path: "/infogerance-informatique-bourges",
 });
 
@@ -58,8 +59,8 @@ export default function InfogerancePage() {
           details:
             "Monitoring des performances (CPU, RAM, disques), gestion des incidents et escalade technique immédiate. Votre infrastructure reste disponible même en dehors des horaires de bureau, week-end inclus.",
           relatedLink: {
-            href: "/services-manages-bourges",
-            label: "Découvrir nos services managés 24/7",
+            href: routes.supervision,
+            label: "Découvrir notre supervision 24/7",
           },
         },
         {
@@ -114,10 +115,10 @@ export default function InfogerancePage() {
         },
       ]}
       differentiator={{
-        title: "Infogérance classique ou services managés : quelle différence ?",
+        title: "Infogérance classique ou supervision 24/7 : quelle différence ?",
         paragraphs: [
           "L'infogérance chez Proxi IT couvre la maintenance, le support et la gestion quotidienne de votre parc informatique à Bourges. C'est le contrat de base pour externaliser votre IT.",
-          "Les services managés vont plus loin : supervision 24/7 avancée, monitoring proactif et gestion des incidents en amont. Si vous avez des serveurs critiques ou un parc complexe, les services managés complètent votre contrat d'infogérance.",
+          "La supervision 24/7 va plus loin : monitoring proactif, alertes automatiques et gestion des incidents en amont. Si vous avez des serveurs critiques ou un parc complexe, la supervision 24/7 complète votre contrat d'infogérance.",
           "Dans les deux cas, vous bénéficiez du même interlocuteur unique basé 8 rue Jules Ferry, sans ticket perdu dans un centre d'appels national.",
         ],
       }}
@@ -151,9 +152,9 @@ export default function InfogerancePage() {
             "Proxi IT combine proximité locale, interlocuteur unique et réactivité. Vous parlez à une équipe basée 8 rue Jules Ferry à Bourges, pas à un centre d'appels. Décisions rapides, connaissance du tissu local.",
         },
         {
-          question: "Quelle différence entre infogérance et services managés ?",
+          question: "Quelle différence entre infogérance et supervision 24/7 ?",
           answer:
-            "L'infogérance couvre la maintenance et le support quotidien. Les services managés ajoutent une supervision 24/7 avancée et une gestion proactive des incidents. Les deux peuvent être combinés selon la criticité de votre parc.",
+            "L'infogérance couvre la maintenance et le support quotidien. La supervision 24/7 ajoute un monitoring proactif, des alertes automatiques et une gestion avancée des incidents. Les deux peuvent être combinés selon la criticité de votre parc.",
         },
         {
           question: "Quel délai de prise en charge en cas de panne critique ?",
@@ -163,9 +164,9 @@ export default function InfogerancePage() {
       ]}
       relatedServices={[
         {
-          href: "/services-manages-bourges",
-          label: "Services managés 24/7",
-          description: "Supervision avancée, monitoring proactif et gestion des incidents.",
+          href: routes.supervision,
+          label: "Supervision informatique 24/7",
+          description: "Monitoring proactif, alertes automatiques et gestion des incidents.",
         },
         {
           href: "/cybersecurite-pme-bourges",
