@@ -33,7 +33,8 @@ export function MobileNav() {
               alt={site.name}
               width={140}
               height={31}
-              className="h-8 w-auto"
+              className="h-8"
+              style={{ width: "auto" }}
             />
           </Link>
         </SheetHeader>

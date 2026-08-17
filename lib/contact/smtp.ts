@@ -1,6 +1,17 @@
 import nodemailer from "nodemailer";
 import type { ContactLeadPayload } from "@/lib/odoo/crm-lead";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export function sanitizeReplyTo(email: string): string {
+  const cleaned = email.replace(/[\r\n]/g, "").trim();
+  if (!EMAIL_REGEX.test(cleaned)) {
+    throw new Error("Adresse reply-to invalide");
+  }
+
+  return cleaned;
+}
+
 function requiredEnv(name: string): string | null {
   const value = process.env[name]?.trim();
   return value || null;
@@ -74,7 +85,7 @@ export async function sendContactEmail(payload: ContactLeadPayload): Promise<voi
   await transporter.sendMail({
     from,
     to,
-    replyTo: payload.email,
+    replyTo: sanitizeReplyTo(payload.email),
     subject,
     text,
     html,

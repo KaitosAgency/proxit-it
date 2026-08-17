@@ -100,38 +100,16 @@ function CarouselDots({
 }
 
 export function ReviewsCarousel({ initialReviews }: ReviewsCarouselProps) {
-  const [reviews, setReviews] = useState(initialReviews);
+  const [reviews] = useState(initialReviews);
   const [index, setIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const visibleCount = useVisibleCount();
   const isTouchCarousel = visibleCount === 1;
 
-  useEffect(() => {
-    let cancelled = false;
-
-    fetch("/api/reviews")
-      .then((response) => (response.ok ? response.json() : null))
-      .then((data: { reviews?: GoogleReview[]; source?: string } | null) => {
-        if (cancelled || !data?.reviews?.length) {
-          return;
-        }
-        const withText = data.reviews.filter((review) => review.text.trim().length > 0);
-        if (withText.length > 0) {
-          setReviews(withText);
-        }
-      })
-      .catch(() => {
-        /* fallback initialReviews */
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   const slideCount = reviews.length;
   const canRotate = slideCount > visibleCount;
+  const activeIndex = slideCount > 0 ? ((index % slideCount) + slideCount) % slideCount : 0;
 
   const advance = useCallback(() => {
     if (!canRotate || isAnimating) {
@@ -150,10 +128,6 @@ export function ReviewsCarousel({ initialReviews }: ReviewsCarouselProps) {
     const timer = window.setInterval(advance, 4500);
     return () => window.clearInterval(timer);
   }, [advance, canRotate, isTouchCarousel]);
-
-  useEffect(() => {
-    setIndex(0);
-  }, [visibleCount, reviews.length]);
 
   const scrollToIndex = useCallback((targetIndex: number) => {
     const container = scrollRef.current;
@@ -198,7 +172,7 @@ export function ReviewsCarousel({ initialReviews }: ReviewsCarouselProps) {
   }, []);
 
   const visibleReviews = Array.from({ length: visibleCount }, (_, offset) => {
-    return reviews[(index + offset) % slideCount];
+    return reviews[(activeIndex + offset) % slideCount];
   });
 
   if (isTouchCarousel && slideCount > 1) {
@@ -219,7 +193,7 @@ export function ReviewsCarousel({ initialReviews }: ReviewsCarouselProps) {
           ))}
         </div>
 
-        <CarouselDots reviews={reviews} activeIndex={index} onSelect={scrollToIndex} />
+        <CarouselDots reviews={reviews} activeIndex={activeIndex} onSelect={scrollToIndex} />
       </div>
     );
   }
@@ -239,7 +213,7 @@ export function ReviewsCarousel({ initialReviews }: ReviewsCarouselProps) {
       >
         {visibleReviews.map((review, offset) => (
           <ReviewCard
-            key={`${review.id}-${index}-${offset}`}
+            key={`${review.id}-${activeIndex}-${offset}`}
             review={review}
             className="review-carousel-enter"
           />
@@ -247,7 +221,7 @@ export function ReviewsCarousel({ initialReviews }: ReviewsCarouselProps) {
       </div>
 
       {canRotate ? (
-        <CarouselDots reviews={reviews} activeIndex={index} onSelect={setIndex} />
+        <CarouselDots reviews={reviews} activeIndex={activeIndex} onSelect={setIndex} />
       ) : null}
     </div>
   );

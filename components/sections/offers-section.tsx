@@ -47,7 +47,7 @@ export function OffersSection() {
           Nos offres
         </p>
         <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight text-brand-navy md:text-5xl">
-          Deux niveaux d'accompagnement, un même engagement.
+          Deux niveaux d&apos;accompagnement, un même engagement.
         </h2>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
           Choisissez le niveau de délégation adapté à votre structure. Tarif au poste,
@@ -110,7 +110,7 @@ export function OffersSection() {
         </div>
 
         <p className="mt-8 text-center text-sm text-muted-foreground">
-          Besoin d'un conseil pour choisir ?{" "}
+          Besoin d&apos;un conseil pour choisir ?{" "}
           <a
             href="/contact"
             className="font-medium text-brand-teal underline decoration-brand-teal/30 underline-offset-2 transition-colors hover:text-brand-teal-dim hover:decoration-brand-teal-dim/30"

@@ -11,6 +11,14 @@ type FaqAccordionProps = {
   className?: string;
 };
 
+function panelId(index: number): string {
+  return `faq-panel-${index}`;
+}
+
+function triggerId(index: number): string {
+  return `faq-trigger-${index}`;
+}
+
 export function FaqAccordion({ items, className }: FaqAccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -23,8 +31,10 @@ export function FaqAccordion({ items, className }: FaqAccordionProps) {
           <Card key={item.question} variant="surface" className="gap-0 rounded-2xl py-0">
             <button
               type="button"
+              id={triggerId(index)}
               className="flex w-full cursor-pointer items-center justify-between gap-4 px-6 py-5 text-left transition-colors hover:text-brand-teal"
               aria-expanded={isOpen}
+              aria-controls={panelId(index)}
               onClick={() => setOpenIndex(isOpen ? null : index)}
             >
               <h3 className="text-base font-semibold text-brand-navy">{item.question}</h3>
@@ -35,6 +45,9 @@ export function FaqAccordion({ items, className }: FaqAccordionProps) {
               )}
             </button>
             <div
+              id={panelId(index)}
+              role="region"
+              aria-labelledby={triggerId(index)}
               className={cn(
                 "grid transition-[grid-template-rows] duration-300 ease-out",
                 isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",

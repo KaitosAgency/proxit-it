@@ -1,4 +1,6 @@
 export const COOKIE_CONSENT_STORAGE_KEY = "proxi-it-cookie-consent";
+export const COOKIE_CONSENT_OPEN_EVENT = "proxi-it-open-cookie-consent";
+export const COOKIE_CONSENT_CHANGE_EVENT = "proxi-it-cookie-consent-change";
 
 export type CookieConsentChoice = {
   analytics: boolean;
@@ -34,9 +36,18 @@ export function writeCookieConsent(analytics: boolean): CookieConsentChoice {
   };
 
   window.localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, JSON.stringify(choice));
+  window.dispatchEvent(new CustomEvent(COOKIE_CONSENT_CHANGE_EVENT));
   return choice;
 }
 
 export function hasAnalyticsConsent(): boolean {
   return readCookieConsent()?.analytics === true;
+}
+
+export function openCookieConsentBanner(): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.dispatchEvent(new CustomEvent(COOKIE_CONSENT_OPEN_EVENT));
 }

@@ -7,7 +7,7 @@ Preview Next.js de la refonte proxi-it.fr, basée sur l'audit Kaitos Book.
 - Next.js 16 (App Router)
 - React 19 + TypeScript
 - Tailwind CSS v4
-- **shadcn/ui** (style base-nova) : Button, Card, Badge, Accordion, Sheet, Input, Select…
+- **shadcn/ui** (style base-nova) : Button, Card, Badge, Sheet, Input, Select…
 - Lucide React
 
 ## Design
@@ -21,7 +21,7 @@ Inspiré de [Faillefox](https://faillefox.com/) :
 
 ## Homepage
 
-Ordre des sections : Hero → Services → Odoo (secondaire) → Trust → FAQ → CTA final.
+Ordre des sections : Hero → Services → Trust → Avis Google → FAQ → CTA final.
 
 ## Démarrage
 
@@ -37,13 +37,25 @@ npm run dev
 
 Ouvrir [http://localhost:3000](http://localhost:3000).
 
+## Qualité & CI
+
+```bash
+npm run lint
+npm test
+npm run build
+```
+
+GitHub Actions (`.github/workflows/ci.yml`) : lint + tests + build sur push/PR.
+
+Plan d’optimisation technique (suivi lots) : [`docs/PLAN-OPTIMISATION-TECHNIQUE.md`](docs/PLAN-OPTIMISATION-TECHNIQUE.md).
+
 ## Pages preview
 
 | Route | Description |
 |---|---|
 | `/` | Home — positionnement IT clair, Odoo secondaire |
 | `/infogerance-informatique-bourges` | Page service pilier |
-| `/services-manages-bourges` | Supervision 24/7 |
+| `/supervision-informatique-bourges` | Supervision informatique 24/7 (ex-`/services-manages-bourges`, redirect 301) |
 | `/cybersecurite-pme-bourges` | Cybersécurité PME |
 | `/sauvegarde-entreprise-bourges` | Sauvegardes |
 | `/integrateur-odoo-bourges` | Silo Odoo |
@@ -126,6 +138,7 @@ Guide détaillé : [Intégration Odoo CRM](../../../Repos/kaitos-book/spaces/pro
 | Mécanisme | Variables | État |
 |---|---|---|
 | Webhook | `ODOO_WEBHOOK_URL` | **Actif** — POST JSON `{ source: "proxi-it-website", ...payload }` |
+| Webhook secret | `ODOO_WEBHOOK_SECRET` | Optionnel — header `X-Webhook-Secret` sur le POST webhook |
 | E-mail SMTP OVH | `SMTP_HOST`, `SMTP_USER`, `SMTP_PASS`, `CONTACT_TO` (+ optionnels ci-dessous) | **Actif** — notification par mail si Odoo absent |
 
 Variables SMTP optionnelles : `SMTP_PORT` (défaut `587`), `SMTP_SECURE` (`false` en 587, `true` en 465), `SMTP_FROM`, `CONTACT_EMAIL_SUBJECT`.
@@ -186,6 +199,7 @@ Guide GA4 + GSC : [Google Analytics et Search Console](../../../Repos/kaitos-boo
 | `ODOO_CRM_USER_ID` | Non | Secours env si param. Odoo absent |
 | **Alternatives au lieu d'Odoo API** | | |
 | `ODOO_WEBHOOK_URL` | Non | Webhook n8n / controller (sans les 4 vars Odoo ci-dessus) |
+| `ODOO_WEBHOOK_SECRET` | Non | Secret partagé — header `X-Webhook-Secret` |
 | **SMTP OVH (secours e-mail)** | | |
 | `SMTP_HOST` | Oui (si SMTP) | Relais OVH — ex. `ssl0.ovh.net` |
 | `SMTP_PORT` | Non | Défaut `587` (STARTTLS) ; `465` pour SSL |

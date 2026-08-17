@@ -1,44 +1,59 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Button } from "@/components/ui/button";
 import { gaMeasurementId, isGoogleAnalyticsEnabled } from "@/lib/analytics";
-import { readCookieConsent, writeCookieConsent } from "@/lib/cookie-consent";
+import {
+  readCookieConsent,
+  writeCookieConsent,
+  COOKIE_CONSENT_CHANGE_EVENT,
+  COOKIE_CONSENT_OPEN_EVENT,
+} from "@/lib/cookie-consent";
 import { updateGoogleConsent } from "@/lib/google-consent";
+
+function subscribeCookieConsent(onStoreChange: () => void): () => void {
+  window.addEventListener(COOKIE_CONSENT_CHANGE_EVENT, onStoreChange);
+  window.addEventListener("storage", onStoreChange);
+  return () => {
+    window.removeEventListener(COOKIE_CONSENT_CHANGE_EVENT, onStoreChange);
+    window.removeEventListener("storage", onStoreChange);
+  };
+}
 
 export function CookieConsentManager() {
   const analyticsConfigured = isGoogleAnalyticsEnabled();
-  const [showBanner, setShowBanner] = useState(false);
-  const [analyticsAllowed, setAnalyticsAllowed] = useState(false);
+  const storedConsent = useSyncExternalStore(
+    subscribeCookieConsent,
+    readCookieConsent,
+    () => null,
+  );
+  const [forceBanner, setForceBanner] = useState(false);
 
   useEffect(() => {
-    if (!analyticsConfigured) {
-      return;
+    function handleOpenBanner() {
+      setForceBanner(true);
     }
 
-    const stored = readCookieConsent();
-    if (stored) {
-      setAnalyticsAllowed(stored.analytics);
-      return;
-    }
+    window.addEventListener(COOKIE_CONSENT_OPEN_EVENT, handleOpenBanner);
+    return () => window.removeEventListener(COOKIE_CONSENT_OPEN_EVENT, handleOpenBanner);
+  }, []);
 
-    setShowBanner(true);
-  }, [analyticsConfigured]);
+  const analyticsAllowed = storedConsent?.analytics === true;
+  const showBanner =
+    analyticsConfigured && (forceBanner || storedConsent === null);
 
   function acceptAnalytics() {
     writeCookieConsent(true);
     updateGoogleConsent(true);
-    setAnalyticsAllowed(true);
-    setShowBanner(false);
+    setForceBanner(false);
   }
 
   function refuseAnalytics() {
     writeCookieConsent(false);
     updateGoogleConsent(false);
-    setAnalyticsAllowed(false);
-    setShowBanner(false);
+    setForceBanner(false);
   }
 
   return (

@@ -97,6 +97,7 @@ export function ContactForm() {
   const [topic, setTopic] = useState("");
   const [attribution, setAttribution] = useState("");
   const [submittedSummary, setSubmittedSummary] = useState<SubmittedSummary | null>(null);
+  const [formLoadedAt] = useState(() => Date.now());
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -110,10 +111,12 @@ export function ContactForm() {
     }
 
     const formData = new FormData(event.currentTarget);
-    const payload = Object.fromEntries(formData.entries());
+    const payload = Object.fromEntries(formData.entries()) as Record<string, string>;
     const topicLabel = getContactTopicLabel(topic);
     payload.topic = topicLabel;
     payload.attribution = attribution;
+    payload._formLoadedAt = String(formLoadedAt);
+    payload._gotcha = String(formData.get("_gotcha") ?? "");
 
     try {
       const response = await fetch("/api/contact", {
@@ -128,8 +131,16 @@ export function ContactForm() {
         throw new Error(data.error ?? "Une erreur est survenue.");
       }
 
+      if (!data.via) {
+        throw new Error(
+          process.env.NODE_ENV === "development"
+            ? "Réponse serveur inattendue (sans canal d'envoi). Vérifiez la console serveur."
+            : "Une erreur est survenue lors de l'envoi.",
+        );
+      }
+
       if (process.env.NODE_ENV === "development") {
-        console.info("[contact-form] Envoi réussi", data);
+        console.info("[contact-form] Envoi réussi via", data.via, data);
       }
 
       trackContactFormSubmit(topicLabel);
@@ -165,7 +176,20 @@ export function ContactForm() {
         <CardDescription>Devis infogérance ou démo Odoo. Réponse sous 24h.</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="relative space-y-4">
+          <input
+            type="text"
+            name="_gotcha"
+            tabIndex={-1}
+            autoComplete="off"
+            data-1p-ignore
+            data-lpignore="true"
+            aria-hidden="true"
+            defaultValue=""
+            className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
+          />
+          <input type="hidden" name="_formLoadedAt" value={formLoadedAt} />
+
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="name">Votre nom *</Label>
@@ -226,7 +250,11 @@ export function ContactForm() {
             <Textarea id="message" name="message" rows={5} required className="bg-white" />
           </div>
 
-          {error ? <p className="text-sm text-destructive">{error}</p> : null}
+          {error ? (
+            <p className="text-sm text-destructive" role="alert" aria-live="polite">
+              {error}
+            </p>
+          ) : null}
 
           <Button type="submit" variant="brand" size="cta" disabled={state === "loading"}>
             {state === "loading" ? "Envoi..." : "Envoyer ma demande"}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LinkedinIcon } from "@/components/icons/linkedin-icon";
+import { CookiePreferencesLink } from "@/components/consent/cookie-preferences-link";
 import { legalLinks, logos, nav, site } from "@/lib/site";
 import { Separator } from "@/components/ui/separator";
 
@@ -15,7 +16,8 @@ export function SiteFooter() {
               alt={site.name}
               width={148}
               height={33}
-              className="h-8 w-auto"
+              className="h-8"
+              style={{ width: "auto" }}
             />
           </Link>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-400">
@@ -32,7 +34,8 @@ export function SiteFooter() {
               alt="Odoo Learning Partner"
               width={200}
               height={72}
-              className="h-11 w-auto"
+              className="h-11"
+              style={{ width: "auto" }}
             />
           </Link>
         </div>
@@ -95,6 +98,7 @@ export function SiteFooter() {
               {link.label}
             </Link>
           ))}
+          <CookiePreferencesLink />
         </div>
       </div>
 

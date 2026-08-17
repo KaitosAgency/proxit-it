@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { createPageMetadata } from "@/lib/page-metadata";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Politique de confidentialité",
   description: "Politique de confidentialité et traitement des données personnelles — Proxi IT.",
-};
+  path: "/politique-de-confidentialite",
+});
 
 export default function PolitiqueConfidentialitePage() {
   return (

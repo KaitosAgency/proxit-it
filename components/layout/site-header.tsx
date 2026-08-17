@@ -16,13 +16,8 @@ type HeaderBarProps = {
 };
 
 function ServicesMenu({ onDarkHero }: { onDarkHero: boolean }) {
-  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     if (!open) {
@@ -122,6 +117,7 @@ function ServicesMenu({ onDarkHero }: { onDarkHero: boolean }) {
 }
 
 function HeaderBar({ floating = false, isScrolled = false }: HeaderBarProps) {
+  const pathname = usePathname();
   const onDarkHero = floating && !isScrolled;
   const logoSrc = onDarkHero ? logos.longLight : logos.longDark;
 
@@ -141,7 +137,8 @@ function HeaderBar({ floating = false, isScrolled = false }: HeaderBarProps) {
             alt={site.name}
             width={158}
             height={35}
-            className="h-8 w-auto transition-opacity duration-300 md:h-9"
+            className="h-8 transition-opacity duration-300 md:h-9"
+            style={{ width: "auto" }}
             priority
           />
         </Link>
@@ -150,7 +147,7 @@ function HeaderBar({ floating = false, isScrolled = false }: HeaderBarProps) {
           className="hidden items-center gap-8 md:flex lg:gap-9"
           aria-label="Navigation principale"
         >
-          <ServicesMenu onDarkHero={onDarkHero} />
+          <ServicesMenu key={pathname} onDarkHero={onDarkHero} />
           {nav.main
             .filter((item) => item.label !== "Services IT")
             .map((item) => (

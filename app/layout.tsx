@@ -28,6 +28,9 @@ const defaultMetadata = createDefaultMetadata(siteUrl);
 export const metadata: Metadata = {
   ...defaultMetadata,
   description: site.description,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     ...defaultMetadata.openGraph,
     description: site.description,
@@ -50,11 +53,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fr" className={cn("h-full", geist.variable, jetbrainsMono.variable, "font-sans")}>
       <body className="flex min-h-full flex-col bg-background text-foreground">
         {isGoogleAnalyticsEnabled() ? <GoogleConsentDefaults /> : null}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-brand-navy focus:shadow-lg"
+        >
+          Aller au contenu
+        </a>
         <AnimatedTabTitle />
         <JsonLd data={organizationJsonLd()} />
         <JsonLd data={websiteJsonLd()} />
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" className="flex-1">{children}</main>
         <SiteFooter />
         <CookieConsentManager />
       </body>

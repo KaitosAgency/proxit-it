@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { BandBottomArc } from "@/components/ui/band-bottom-arc";
 import {
   statsBandBadges,
@@ -9,7 +9,6 @@ import {
 } from "@/lib/site";
 
 function getStatsBandMessage(): StatsBandMessage {
-  // Europe/Paris timezone
   const now = new Date();
   const formatter = new Intl.DateTimeFormat("fr-FR", {
     timeZone: "Europe/Paris",
@@ -32,7 +31,6 @@ function getStatsBandMessage(): StatsBandMessage {
   if (hour < 12) {
     return statsBandMessages.morningWeekday;
   }
-  // Pause déjeuner : 12h-14h
   if (hour < 14) {
     return statsBandMessages.lunchWeekday;
   }
@@ -42,22 +40,21 @@ function getStatsBandMessage(): StatsBandMessage {
   return statsBandMessages.eveningWeekday;
 }
 
-export function StatsBand() {
-  // Default message for SSR (morning weekday)
-  const [message, setMessage] = useState<StatsBandMessage>(
-    statsBandMessages.morningWeekday
-  );
+function subscribeStatsBand(): () => void {
+  return () => {};
+}
 
-  useEffect(() => {
-    setMessage(getStatsBandMessage());
-  }, []);
+export function StatsBand() {
+  const message = useSyncExternalStore(
+    subscribeStatsBand,
+    getStatsBandMessage,
+    () => statsBandMessages.morningWeekday,
+  );
 
   return (
     <section className="relative z-10 bg-brand-navy pb-5 md:pb-6">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-7 md:flex-row md:items-center md:justify-between md:px-6">
-        {/* Centré verticalement avec items-center */}
         <div className="flex items-center gap-4">
-          {/* Figure plus imposante, sans-serif, stylisée */}
           <span className="text-5xl font-extrabold leading-none tracking-tight text-brand-teal md:text-6xl">
             {message.figure}
           </span>

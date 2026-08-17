@@ -8,9 +8,15 @@ export async function sendContactWebhook(
     throw new Error("ODOO_WEBHOOK_URL non configuré");
   }
 
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  const webhookSecret = process.env.ODOO_WEBHOOK_SECRET?.trim();
+  if (webhookSecret) {
+    headers["X-Webhook-Secret"] = webhookSecret;
+  }
+
   const response = await fetch(webhookUrl, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify({
       source: "proxi-it-website",
       ...payload,

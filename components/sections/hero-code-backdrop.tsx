@@ -1,8 +1,30 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { heroCodeBackdrop } from "@/lib/site";
 import { cn } from "@/lib/utils";
+
+function subscribeReducedMotion(onStoreChange: () => void): () => void {
+  const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  mediaQuery.addEventListener("change", onStoreChange);
+  return () => mediaQuery.removeEventListener("change", onStoreChange);
+}
+
+function getReducedMotionSnapshot(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function getReducedMotionServerSnapshot(): boolean {
+  return false;
+}
+
+function usePrefersReducedMotion(): boolean {
+  return useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    getReducedMotionServerSnapshot,
+  );
+}
 
 type TypingColumnProps = {
   lines: readonly string[];
@@ -19,7 +41,95 @@ type TypingColumnProps = {
   linePauseMs?: number;
 };
 
+function StaticColumn({
+  lines,
+  className,
+  boundsClass = "top-0 bottom-[28%]",
+  maskClass = "[mask-image:linear-gradient(to_bottom,black_0%,black_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_88%,transparent_100%)]",
+  textAlign = "left",
+  opacityClass = "opacity-[0.14]",
+  contentClassName,
+  maxVisibleLines = 14,
+}: TypingColumnProps) {
+  return (
+    <div
+      className={cn(
+        "pointer-events-none absolute select-none overflow-hidden",
+        boundsClass,
+        opacityClass,
+        className,
+      )}
+    >
+      <div className={cn("flex h-full flex-col justify-start px-3 pt-0", maskClass, contentClassName)}>
+        <pre
+          className={cn(
+            "m-0 font-mono text-[11px] leading-[1.85] tracking-wide text-brand-teal lg:text-xs xl:text-[13px]",
+            textAlign === "right" && "text-right",
+          )}
+        >
+          {lines.slice(0, maxVisibleLines).map((line, index) => (
+            <span key={`${line}-${index}`} className="block whitespace-nowrap">
+              {line}
+            </span>
+          ))}
+        </pre>
+      </div>
+    </div>
+  );
+}
+
 function TypingColumn({
+  lines,
+  className,
+  boundsClass = "top-0 bottom-[28%]",
+  maskClass = "[mask-image:linear-gradient(to_bottom,black_0%,black_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_88%,transparent_100%)]",
+  textAlign = "left",
+  opacityClass = "opacity-[0.14]",
+  contentClassName,
+  maxVisibleLines = 14,
+  startDelayMs = 0,
+  headStartLines = 0,
+  charDelayMs = 32,
+  linePauseMs = 520,
+}: TypingColumnProps) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const safeHeadStart = Math.min(headStartLines, lines.length);
+
+  if (prefersReducedMotion) {
+    return (
+      <StaticColumn
+        lines={lines}
+        className={className}
+        boundsClass={boundsClass}
+        maskClass={maskClass}
+        textAlign={textAlign}
+        opacityClass={opacityClass}
+        contentClassName={contentClassName}
+        maxVisibleLines={maxVisibleLines}
+      />
+    );
+  }
+
+  return (
+    <AnimatedTypingColumn
+      key={`${safeHeadStart}-${lines.length}-${lines[0] ?? ""}`}
+      lines={lines}
+      className={className}
+      boundsClass={boundsClass}
+      maskClass={maskClass}
+      textAlign={textAlign}
+      opacityClass={opacityClass}
+      contentClassName={contentClassName}
+      maxVisibleLines={maxVisibleLines}
+      startDelayMs={startDelayMs}
+      headStartLines={headStartLines}
+      charDelayMs={charDelayMs}
+      linePauseMs={linePauseMs}
+    />
+  );
+}
+
+function AnimatedTypingColumn({
   lines,
   className,
   boundsClass = "top-0 bottom-[28%]",
@@ -43,17 +153,8 @@ function TypingColumn({
   const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) {
-      setCompletedLines(lines.slice(0, maxVisibleLines));
-      setCurrentLine("");
-      return;
-    }
-
     lineIndexRef.current = safeHeadStart % lines.length;
     charIndexRef.current = 0;
-    setCompletedLines(lines.slice(0, safeHeadStart));
-    setCurrentLine("");
 
     const clearTimer = () => {
       if (timeoutRef.current !== null) {

@@ -1,8 +1,8 @@
 import { LinkButton } from "@/components/ui/link-button";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
+import { OdooLogo } from "@/components/ui/odoo-logo";
 import Link from "next/link";
-import { logos, site } from "@/lib/site";
+import { site } from "@/lib/site";
 import { ConsolePanel } from "./console-panel";
 import { HeroCodeBackdrop } from "./hero-code-backdrop";
 
@@ -56,13 +56,7 @@ export function HeroSection() {
             <p className="mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 font-mono text-xs text-slate-400 md:justify-start">
               <span className="inline-flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center rounded-md bg-[#714B67] px-1.5 py-0.5 shadow-sm shadow-black/20">
-                  <Image
-                    src={logos.odoo}
-                    alt="Odoo"
-                    width={72}
-                    height={20}
-                    className="h-5 w-auto brightness-0 invert"
-                  />
+                  <OdooLogo height={20} className="brightness-0 invert" />
                 </span>
                 Odoo Learning Partner
               </span>

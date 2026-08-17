@@ -116,6 +116,16 @@ function getFallbackReviews(): GoogleReviewsData {
   };
 }
 
+/** True when GOOGLE_PLACES_API_KEY is set (live fetch attempted at build/SSR). */
+export function isGooglePlacesApiEnabled(): boolean {
+  return Boolean(process.env.GOOGLE_PLACES_API_KEY?.trim());
+}
+
+/** For future JSON-LD Review[] — same source as the home reviews band. */
+export async function getReviewsForStructuredData(): Promise<GoogleReviewsData> {
+  return getGoogleReviews();
+}
+
 export const getGoogleReviews = cache(async (): Promise<GoogleReviewsData> => {
   try {
     const live = await fetchFromGooglePlaces();

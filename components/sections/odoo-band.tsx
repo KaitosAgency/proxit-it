@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { LinkButton } from "@/components/ui/link-button";
-import { logos, odooProofStats } from "@/lib/site";
+import { OdooLogo } from "@/components/ui/odoo-logo";
+import { odooProofStats } from "@/lib/site";
 
 export function OdooBand() {
   return (
@@ -10,13 +10,7 @@ export function OdooBand() {
           <div className="min-w-0 flex-1 max-w-2xl">
             <div className="inline-flex items-center gap-3">
               <span className="inline-flex items-center rounded-full bg-[#714B67] px-2.5 py-0.5 shadow-sm shadow-black/20">
-                <Image
-                  src={logos.odoo}
-                  alt="Odoo"
-                  width={96}
-                  height={28}
-                  className="h-7 w-auto brightness-0 invert"
-                />
+                <OdooLogo height={28} className="brightness-0 invert" />
               </span>
               <p className="font-mono text-sm font-bold uppercase tracking-[0.15em] text-brand-teal">
                 Intégration ERP
